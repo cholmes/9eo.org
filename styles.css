@@ -446,6 +446,17 @@ h1, h2, h3, h4 {
   border-radius: 999px;
   white-space: nowrap;
 }
+.type-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mute);
+  padding: 2px 7px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  white-space: nowrap;
+}
 .project-desc {
   color: var(--ink-soft);
   font-size: 15.5px;
