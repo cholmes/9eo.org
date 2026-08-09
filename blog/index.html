@@ -1,0 +1,34 @@
+---
+layout: default
+title: Blog
+description: Writing by Chris Holmes — cloud-native geospatial, open standards, and open ecosystems, from 2005 to today.
+---
+<section class="section" style="border-top: none;">
+  <div class="wrap">
+    <div class="row">
+      <div class="meta">§ Blog</div>
+      <div>
+        <h2>Writing.</h2>
+        <p style="max-width: 58ch; color: var(--ink-soft);">Two decades of posts in one place — ported from Medium, WordPress, the OGC blog, and cloudnativegeo.org, with new writing landing here first. Subscribe via <a href="/feed.xml">RSS</a>.</p>
+
+        {% assign by_year = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+        {% for year in by_year %}
+        <div class="post-year">
+          <div class="post-year-label">{{ year.name }}</div>
+          <ul class="post-list">
+            {% for post in year.items %}
+            <li>
+              <a class="naked post-list-item" href="{{ post.url }}">
+                <span class="post-list-date">{{ post.date | date: "%b %-d" }}</span>
+                <span class="post-list-title">{{ post.title }}</span>
+                <span class="post-list-src">{{ post.source }}</span>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,28 @@
+title: Chris Holmes — 9eo.org
+description: Chris Holmes on cloud-native geospatial, open standards, and open ecosystems.
+url: "https://9eo.org"
+author: Chris Holmes
+
+markdown: kramdown
+permalink: /blog/:title/
+
+plugins:
+  - jekyll-feed
+
+feed:
+  path: feed.xml
+  posts_limit: 20
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+
+exclude:
+  - README.md
+  - LICENSE
+  - Gemfile
+  - Gemfile.lock
+  - vendor

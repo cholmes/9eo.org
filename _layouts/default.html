@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{% if page.title %}{{ page.title }} — 9eo.org{% else %}{{ site.title }}{% endif %}</title>
+<meta name="description" content="{{ page.description | default: site.description }}" />
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="/styles.css" />
+<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="/feed.xml" />
+{% if page.image %}<meta property="og:image" content="{{ page.image | absolute_url }}" />{% endif %}
+<meta property="og:title" content="{{ page.title | default: site.title }}" />
+<meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}" />
+<meta property="og:url" content="{{ page.url | absolute_url }}" />
+</head>
+
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand naked" aria-label="9eo.org home">
+      <img class="brand-icon" src="/favicon.svg" alt="" width="22" height="22" />
+      <span class="nine">9</span><span>eo</span><span class="dot">.org</span>
+    </a>
+    <div class="nav-links">
+      <a href="/#about">About</a>
+      <a href="/#projects">Projects</a>
+      <a href="/#talks">Talks</a>
+      <a href="/blog/">Blog</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+{{ content }}
+
+<footer class="footer">
+  <div class="wrap" style="display: flex; justify-content: space-between; width: 100%; gap: 12px; flex-wrap: wrap;">
+    <div>© Chris Holmes · 9eo.org · <a href="/feed.xml">RSS</a></div>
+    <div class="scale row-coord">
+      <span>0</span>
+      <span class="scale-bar"></span>
+      <span>1°</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

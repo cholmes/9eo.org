@@ -1,0 +1,53 @@
+---
+layout: post
+title: "SpatioTemporal Asset Catalog (STAC) Community Advances and 0.6.1 Release"
+date: 2019-01-28
+source: medium
+source_name: "Radiant Earth Insights (Medium)"
+source_url: https://medium.com/radiant-earth-insights/spatiotemporal-asset-catalog-stac-community-advances-and-0-6-1-release-bddcd967d86f
+image: /assets/img/posts/spatiotemporal-asset-catalog-stac-community-advances-and-0-6/1_5d4lkd6lpEuI7u6NTzif4w.png
+---
+
+Though we’ve been quiet on public forums, the momentum on [SpatioTemporal Asset Catalogs](https://github.com/radiantearth/stac-spec/) (STAC) continues to grow. I’m quite pleased by the latest advances, as it is almost all real-world implementation work that is driving improvements to the specification by grappling with large and diverse catalogs. The community has also been expanding to more types of data, which is quite exciting to see.
+
+## 0.6.1 Release
+
+Before I dig into all of the great work happenings, I did want to draw a small bit of attention to the [0.6.1 release](https://github.com/radiantearth/stac-spec/releases/tag/v0.6.1)! In truth, this is quite a minor release, as there are no substantive changes to the specification, but instead a number of little fixes. Some are typos, some examples that weren’t quite right, some version numbers of JSON Schema for validation. But it is important that everything is clear and correct in a good specification, and it is awesome to see our community not only using the spec but also contributing when they notice problems. So a big thank you to everyone who made pull requests for 0.6.1!
+
+## Community Progress
+
+The STAC Community is really growing — our last two calls have had over 10 people on each of them, and even more, people are sounding in on the [issue tracker](https://github.com/radiantearth/stac-spec/issues). If you’d like to participate or observe on the calls just jump on the [STAC Gitter](https://gitter.im/SpatioTemporal-Asset-Catalog/Lobby) and let [@matthewhanson](https://github.com/matthewhanson) know you’d like to be added to the call invite. As for some of the highlights:
+
+![](/assets/img/posts/spatiotemporal-asset-catalog-stac-community-advances-and-0-6/1_QFQ6HryIZrYbJ4lB1nLCkA.png)
+
+**Sat-api and friends: **Matt announced how [sat-api](https://github.com/sat-utils/sat-api) has [embraced STAC](https://medium.com/devseed/sat-api-an-api-for-spatiotemporal-asset-catalogs-88c3c78fdb0e) a number of months ago. But the work they’ve done since then has been truly impressive. Sat-api is now able to ingest *any* static catalog, and they’ve designed the ingestion API to be as simple as possible. It is serving up the entire Landsat8 and Sentinel catalogs, cataloging over 7 million images of Earth (each with a number of assets). And it’s completely open source, so anyone can run their own scalable STAC API on AWS. They also developed a pair of open source libraries: [sat-stac](https://github.com/sat-utils/sat-stac), a python library for creating and updating static catalogs, and [sat-search](https://github.com/sat-utils/sat-search), which is a python client library that talks to STAC APIs. Their team working on STAC related tools is growing, with [Sean Harkins](https://github.com/sharkinsspatial) (who has done lots of OpenAerialMap work) and [Vincent Sarago](https://github.com/vincentsarago) (of [rio-tiler](https://github.com/mapbox/rio-tiler) and [remotepixel.ca](https://remotepixel.ca/) fame) both joining recently.
+
+**STAC Validation with STACLint: **[James](https://github.com/jbants) from [Sparkgeo](https://www.sparkgeo.com/) has released [STAClint.com](http://staclint.com) that enables anyone to check their online catalog to see if it complies with the specification. The exact same validator is used in the STAC continuous integration validation and the online STACLint can validate different versions of the specification. This is a huge help to anyone who is creating new catalogs.
+
+![](/assets/img/posts/spatiotemporal-asset-catalog-stac-community-advances-and-0-6/1_2dAKrWoooGY9PeeTBJFMAQ.gif)
+
+**STAC Browser + Crawling: **[Seth](https://github.com/mojodna), my co-fellow at [Radiant Earth](https://www.radiant.earth/team/), has been using his time there to advance [STAC Browser](https://github.com/radiantearth/stac-browser) in a number of directions. One of the main ones is making it so STAC catalogs and items can be crawled by Google and show up in search results. You can see below the early progress — one of my goals for STAC is that if you have the ID of a satellite asset, like ‘20170831_172754_101c’ (a Planet Dove image released in conjunction with [Hurricane Harvey response](https://www.planet.com/disaster/hurricane-harvey-2017-08-28/)) it will return in Google. It’s not quite all the way where we want, with the actual Item page showing up, but hopefully, the next crawl of Google will get there. He’s also got STAC Browser working with [headless chrome](https://developers.google.com/web/updates/2017/04/headless-chrome) to generate static resources and has mapped STAC to [JSON-LD](https://github.com/radiantearth/stac-spec/issues/378), in line with [Google’s Dataset Search recommendations](https://developers.google.com/search/docs/data-types/dataset).
+
+![](https://miro.medium.com/v2/resize:fit:1400/1*DStspFRHgl8rjb5jXcy5GA.gif)
+
+**CBERS advancing STAC updates**: The [AWS Catalog of the China-Brazil Earth Resources Satellite](https://registry.opendata.aws/cbers/) has been one of the first full data catalogs to adopt STAC. [Frederico](https://github.com/fredliporace) published a great blog post on the [CBERS on AWS architecture with STAC](https://aws.amazon.com/blogs/publicsector/keeping-a-spatiotemporal-asset-catalog-stac-up-to-date-with-sns-sqs/) explaining their innovative use of SNS/SQS to put out a static STAC that also stays fully up to date and notifies others of changes. They’re now working on a STAC API implementation built on elasticsearch, demonstrating one of my personal dreams for STAC to be able to integrate between the static and dynamic flavors, using cool cloud services to keep it all in sync.
+
+**Harris in Production with STAC**: [Harris](https://www.harrisgeospatial.com/) has been creating an innovative STAC API server to meet a number of their tech initiatives. The first public light it is seeing is as part of their refresh of [MapMart](https://www.harrisgeospatial.com/Data-Imagery/Home.html). It’s been in testing internally for a while, and is starting to release publicly. It’s on STAC 0.5.x, as 0.6.x was not ready when they were building, but it will update in time.
+
+![](/assets/img/posts/spatiotemporal-asset-catalog-stac-community-advances-and-0-6/1_NZv94itZRqQXL0p7OMonHA.png)
+
+*Sentinel 5P Ozone data, visualized with Google Earth Engine*
+
+**OpenEO and Google Earth Engine Catalogs: **At the last [STAC Sprint](https://medium.com/radiant-earth-insights/the-state-of-stac-talk-and-sprint-3-recap-cd8eda3b8bdb) we welcomed collaborators from [OpenEO](http://openeo.org/) and [Google Earth Engine](https://earthengine.google.com/), who both worked on the [Collection specification](https://github.com/radiantearth/stac-spec/blob/v0.6.1/collection-spec/collection-spec.md). They both have catalogs up, that expose their entire data holdings, though just as collections, as that is what they are focused on. Google Earth Engine has lately been investing heavily in making their [data catalog](https://developers.google.com/earth-engine/datasets/catalog/) much more accessible. The image at left took me seconds to make after browsing their [catalog](https://developers.google.com/earth-engine/datasets/catalog/) and finding [Sentinel-5P NRTI O3: Near Real Time Ozone Data](https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S5P_NRTI_L3_O3). They also released a pair of GDAL plugins for searching the [Google Earth Engine Data API ](https://www.gdal.org/drv_eeda.html)and accessing [Image](https://www.gdal.org/frmt_eedai.html)s in it, which seem to portend even more accessibility. I’m excited that they see STAC as part of opening things up more, and hope they’ll embrace it more. You can see the 400+ datasets available in their [STAC Catalog](https://gee.stac.cloud/) (browsable with STAC Browser, raw static catalog is at [earthengine-stac.storage.googleapis.com/catalog/catalog.json](https://earthengine-stac.storage.googleapis.com/catalog/catalog.json)).
+
+**gRPC + proto version of STAC: **[David](https://github.com/davidraleigh) recently joined [Swiftera](https://www.swiftera.co/) and is helping them with their data pipeline. He’s exploring using STAC with [gRPC](https://grpc.io/) and [Protocol Buffers](https://developers.google.com/protocol-buffers/). I’ve long been interested in protobufs for geospatial, and am excited to see what he comes up with, and how that relates to [geobuf](https://github.com/mapbox/geobuf). He’s making a catalog of NAIP data (code at [github.com/geo-grpc/naip-stac-grpc](https://github.com/geo-grpc/naip-stac-grpc), live service coming soon) and also has some [proto definitions for STAC](https://github.com/geo-grpc/protobuf/tree/master/src/epl/protobuf).
+
+**OGC Briefing: **[Michael](https://github.com/hgs-msmith) gave a briefing on STAC at the Open Geospatial Consortium Technical Committee meeting in December. He presented to the Metadata Domain Working Group, giving an overview of STAC and how we aim to collaborate with OGC. You can see his [presentation online](https://drive.google.com/file/d/1Xf6Ix6pnMVpUAFh-bVw0EmkHls_WPUS9/view?usp=sharing).
+
+**Join Us: **There have been a number of new organizations showing up online and I’ve also had private conversations with some of the biggest commercial and government players in the industry about STAC. I think we’ll see even more momentum in the next few months and now is a great time to get involved.
+
+## **Extensions**
+
+I’m going to bring this post to a close, but I’m planning a followup post to come soon. It will touch on the other main area of collaboration happening right now, which is the Extensions to STAC. I believe this is where STAC can really shine, enabling specific domains to use the core and extend to their core use cases. And I am sure that having more extensions piloted early in the spec development will help ensure the most robust and flexible spec. I’m quite pleased that we’ve had quite a bit of activity there. I’ll highlight these in my next post, as well as re-articulate our philosophy and intention around extensions.
+
+![](/assets/img/posts/spatiotemporal-asset-catalog-stac-community-advances-and-0-6/1_5d4lkd6lpEuI7u6NTzif4w.png)

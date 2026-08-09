@@ -596,6 +596,176 @@ h1, h2, h3, h4 {
 .footer .scale-bar::after { right: 0; }
 
 /* ============================================================
+   Blog — post listing
+   ============================================================ */
+
+.post-year {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 24px;
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+  align-items: start;
+}
+.post-year:first-of-type { border-top: none; }
+.post-year-label {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--mute);
+  padding-top: 4px;
+}
+@media (max-width: 560px) {
+  .post-year { grid-template-columns: 1fr; gap: 8px; }
+}
+
+.post-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.post-list-item {
+  display: grid;
+  grid-template-columns: 58px 1fr auto;
+  gap: 14px;
+  align-items: baseline;
+  padding: 7px 0;
+}
+.post-list-item:hover .post-list-title { color: var(--accent); }
+.post-list-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--mute);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.post-list-title {
+  font-size: 16.5px;
+  font-weight: 450;
+  letter-spacing: -0.01em;
+  transition: color 0.15s ease;
+}
+.post-list-src {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--mute);
+  text-transform: uppercase;
+}
+@media (max-width: 560px) {
+  .post-list-src { display: none; }
+}
+
+/* ============================================================
+   Blog — post page
+   ============================================================ */
+
+.post { border-top: none; }
+
+.post-head {
+  max-width: 720px;
+  margin: 0 auto 40px;
+}
+.post-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-bottom: 14px;
+}
+.post-title {
+  font-size: clamp(30px, 4.4vw, 46px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  margin-bottom: 16px;
+}
+.post-source {
+  font-size: 14px;
+  color: var(--mute);
+}
+
+.post-content {
+  max-width: 720px;
+  margin: 0 auto;
+  font-size: 17.5px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+.post-content h2, .post-content h3, .post-content h4 {
+  color: var(--ink);
+  margin: 1.6em 0 0.6em;
+  line-height: 1.25;
+}
+.post-content h2 { font-size: 26px; }
+.post-content h3 { font-size: 21px; }
+.post-content h4 { font-size: 18px; }
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 28px auto;
+  border: 1px solid var(--line);
+}
+.post-content img + em,
+.post-content p > em:only-child {
+  display: block;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 12.5px;
+  color: var(--mute);
+  margin-top: -18px;
+  margin-bottom: 28px;
+}
+.post-content blockquote {
+  margin: 1.4em 0;
+  padding: 4px 0 4px 20px;
+  border-left: 2px solid var(--accent);
+  color: var(--ink-soft);
+}
+.post-content pre {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 16px 18px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.post-content code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.post-content pre code { background: none; padding: 0; }
+.post-content ul, .post-content ol { padding-left: 1.4em; }
+.post-content li { margin-bottom: 0.4em; }
+.post-content hr {
+  border: none;
+  border-top: 1px dashed var(--line-strong);
+  margin: 2.2em auto;
+  width: 120px;
+}
+
+.post-foot {
+  max-width: 720px;
+  margin: 56px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.post-foot a { color: var(--mute); }
+.post-foot a:hover { color: var(--accent); }
+
+/* ============================================================
    Tweaks-panel scoping (don't let panel inherit weird styles)
    ============================================================ */
 
