@@ -5,7 +5,6 @@ date: 2024-04-29
 source: cloudnativegeo
 source_name: "cloudnativegeo.org"
 source_url: https://cloudnativegeo.org/blog/2024/04/fiboa-core-specification-extensions/
-authors: "Chris Holmes, Taylor Geospatial Engine Industry Fellow"
 ---
 
 Last week, we [introduced fiboa](https://cloudnativegeo.org/blog/2024/04/introducing-fiboa/), a collaborative project with the [Taylor Geospatial Engine (TGE)](https://tgengine.org/) designed to standardize farm field boundary data and bootstrap an ‘architecture of participation’ around agricultural and related data. The center of [fiboa](https://github.com/fiboa/) is a [specification](https://github.com/fiboa/specification/tree/main) for representing field boundary data in GeoJSON & GeoParquet in a standard way, with optional ‘extensions’ that specify additional attributes. But we believe that thinking of fiboa as ‘just’ a specification is outdated. fiboa is the entire ecosystem of data adhering to the specification, tools to help convert data (including using AI models to in turn create more data), the discussions and conversations that evolve the specs, and of course the community people who are building it all together.

@@ -5,7 +5,7 @@ date: 2025-02-13
 source: cloudnativegeo
 source_name: "cloudnativegeo.org"
 source_url: https://cloudnativegeo.org/blog/2025/02/geoparquet-2.0-going-native/
-authors: "Chris Holmes, Joris Van den Bossche, Jacob Wasserman, Jia Yu, Kyle Barron, Dewey Dunnington, Tim Schaub, Javier de la Torre"
+authors: "Chris Holmes, Joris Van den Bossche, Jacob Wasserman, Jia Yu, Kyle Barron, Dewey Dunnington, Tim Schaub, and Javier de la Torre"
 ---
 
 ![New geo data types in Parquet and Iceberg](/assets/img/posts/geoparquet-2.0-going-native/20250213-parquet_iceberg_new_geo_data_types.png)

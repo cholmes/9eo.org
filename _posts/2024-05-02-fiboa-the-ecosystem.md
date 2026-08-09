@@ -5,7 +5,6 @@ date: 2024-05-02
 source: cloudnativegeo
 source_name: "cloudnativegeo.org"
 source_url: https://cloudnativegeo.org/blog/2024/05/fiboa-the-ecosystem/
-authors: "Chris Holmes, Taylor Geospatial Engine Industry Fellow"
 ---
 
 fiboa is a new collaborative project to improve farm field boundary data interoperability and other associated agriculture data, that we [introduced](https://cloudnativegeo.org/blog/2024/04/introducing-fiboa/) a couple of weeks ago. This post complements our previous deep dive into the [follow-up post](https://cloudnativegeo.org/blog/2024/04/fiboa-core-specification-extensions/) core specification and its extensions. In that post, we mentioned that fiboa is not just a specification; it’s a complete system. It includes the entire ecosystem of data adhering to the specification, the discussions and conversations that evolve the specs, and of course, the community people who are building it all together. In this post, we introduce the initial tools, data, and community that form that ecosystem.

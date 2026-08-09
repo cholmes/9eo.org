@@ -5,7 +5,6 @@ date: 2023-09-18
 source: cloudnativegeo
 source_name: "cloudnativegeo.org"
 source_url: https://cloudnativegeo.org/blog/2023/09/geoparquet-1.0.0-released/
-authors: "Chris Holmes, Radiant Earth Technical Fellow"
 ---
 
 The GeoParquet community is pleased to announce the release of [GeoParquet 1.0.0](https://geoparquet.org/releases/). This is a huge milestone, indicating that the format has been implemented and tested by lots of different users and systems and the core team is confident that it is a stable foundation that won’t change. There are more than 20 different libraries and tools that support the format, and hundreds of gigabytes of public data is available in GeoParquet, from a number of different data providers.

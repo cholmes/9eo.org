@@ -5,7 +5,6 @@ date: 2024-03-28
 source: cloudnativegeo
 source_name: "cloudnativegeo.org"
 source_url: https://cloudnativegeo.org/blog/2024/03/coming-soon-geoparquet-1.1/
-authors: "Chris Holmes, Radiant Earth Technical Fellow"
 ---
 
 On Monday, we had our regular GeoParquet community meeting, and everyone agreed it’s a pretty exciting time, but that we need to tell people more about what we’re up to. We’re feeling ‘feature complete’ for a version 1.1 release of the specification, and so wanted to give all implementors a heads up so they could try it out and give any last feedback. And to also just share what’s been cooking. We’ll have a full announcement release when the 1.1 release goes out, so consider this a bit of a preview.
