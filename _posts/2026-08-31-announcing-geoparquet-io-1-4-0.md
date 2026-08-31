@@ -3,6 +3,8 @@ layout: post
 title: "Announcing geoparquet-io 1.4.0!"
 date: 2026-08-31
 image: /assets/img/posts/announcing-geoparquet-io-1-4-0/hilbert-vs-str-sort.png
+also_at_url: https://medium.com/@cholmes/announcing-geoparquet-io-1-4-0-bb54fd4ac586
+also_at_name: Medium
 ---
 
 I’m excited to announce the [latest release](https://github.com/geoparquet/geoparquet-io/releases/tag/v1.4.0) of [geoparquet-io](https://geoparquet.io/), version 1.4.0. We’ve been making bursty progress since launch, mostly driven by the real world needs of [Portolan](https://portolan-sdi.org/) (specifically [portolan-cli](https://portolan-sdi.github.io/portolan-cli/)). We’ll soon be talking about that project a lot, but from the perspective of geoparquet-io it’s served as a natural place to put many things that felt beyond the scope of what reasonably fit in the geoparquet-io library. And the portolan-cli in turn has driven a ton of improvements into gpio, as it’s been used to convert a bunch of diverse real world datasets into well-formatted geoparquet.
@@ -24,7 +26,7 @@ For 1.4.0 I’m pleased to share that we had three new contributors, and saw mor
 
 Top of the list is [Cayetano Benavent](https://github.com/cayetanobv), who was putting geoparquet-io through its paces creating Portolan catalogs from ArcGIS Servers. One of the nicest improvements he added is the ability to handle different types of curves. DuckDB (our core engine) can’t handle the curves natively, so instead we’ll translate it into a line or polygon equivalent, performing an approximation ([#647](https://github.com/geoparquet/geoparquet-io/pull/647), streamed rather than materialized in [#650](https://github.com/geoparquet/geoparquet-io/pull/650)) — see [Curved Geometries](https://geoparquet.io/guide/convert/#curved-geometries) in the docs. He added ten PRs in total, including fixes for nulls and reprojection across CSV and GeoJSON conversions.
 
-[Stefan Ekehaug](https://github.com/oakhill87) had a couple nice bug fixes ([#627](https://github.com/geoparquet/geoparquet-io/pull/627)), and then just yesterday submitted [Sort Tile Recursive (STR) sorting](https://geoparquet.io/cli/sort/#str) ([#766](https://github.com/geoparquet/geoparquet-io/pull/766)) as an alternative to Hilbert sorting. [Kanahiro Iguchi](https://spatialty.io/) did some great [benchmarking on spatial sort algorithms for GeoParquet](https://github.com/Kanahiro/spatial-sort-benchmark) and found that STR did the best in terms of spatial locality and remote query performance.
+[Stefan Ekehaug](https://github.com/oakhill87) had a couple nice bug fixes ([#627](https://github.com/geoparquet/geoparquet-io/pull/627)), and then just yesterday submitted [Sort Tile Recursive (STR) sorting](https://geoparquet.io/cli/sort/#str) ([#766](https://github.com/geoparquet/geoparquet-io/pull/766)) as an alternative to Hilbert sorting. [Kanahiro Iguchi](https://spatialty.io/) did some great [benchmarking on spatial sort algorithms for GeoParquet](https://github.com/Kanahiro/spatial-sort-benchmark) and found that STR did the best in terms of spatial locality and remote query performance, so I’m excited that it’s now super easy to sort any GeoParquet file to STR with gpio.
 
 ![Row group bounding boxes over northern France, Hilbert sorting on the left and STR pack on the right](/assets/img/posts/announcing-geoparquet-io-1-4-0/hilbert-vs-str-sort.png)
 
