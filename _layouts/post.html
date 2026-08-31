@@ -23,3 +23,21 @@ layout: default
     </div>
   </div>
 </article>
+
+<script>
+  // Append a "#" permalink to each section heading. Kramdown already emits
+  // the ids, so #section URLs work regardless of whether this runs.
+  (function () {
+    var content = document.querySelector('.post-content');
+    if (!content) return;
+    var headings = content.querySelectorAll('h2[id], h3[id], h4[id]');
+    Array.prototype.forEach.call(headings, function (heading) {
+      var link = document.createElement('a');
+      link.className = 'heading-anchor';
+      link.href = '#' + heading.id;
+      link.textContent = '#';
+      link.setAttribute('aria-label', 'Link to this section');
+      heading.appendChild(link);
+    });
+  })();
+</script>

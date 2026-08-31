@@ -698,10 +698,47 @@ h1, h2, h3, h4 {
   color: var(--ink);
   margin: 1.6em 0 0.6em;
   line-height: 1.25;
+  position: relative;
 }
 .post-content h2 { font-size: 26px; }
 .post-content h3 { font-size: 21px; }
 .post-content h4 { font-size: 18px; }
+
+/* Hover-revealed "#" permalink beside each section heading. The ids come
+   from kramdown, so the links work with or without the script. */
+.heading-anchor {
+  position: absolute;
+  left: -0.85em;
+  top: 0;
+  width: 0.85em;
+  color: var(--mute);
+  font-weight: 400;
+  text-decoration: none;
+  border-bottom: none;
+  opacity: 0;
+  transition: opacity 0.12s ease-in-out;
+}
+.post-content h2:hover .heading-anchor,
+.post-content h3:hover .heading-anchor,
+.post-content h4:hover .heading-anchor,
+.heading-anchor:focus-visible {
+  opacity: 1;
+}
+.heading-anchor:hover { color: var(--accent); }
+
+/* No hover on touch, and no room in the margin once the column reaches
+   the viewport edge, so sit inline after the text and stay visible. */
+@media (max-width: 800px) {
+  .heading-anchor {
+    position: static;
+    width: auto;
+    opacity: 0.45;
+    margin-left: 0.35em;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .heading-anchor { transition: none; }
+}
 .post-content img {
   max-width: 100%;
   height: auto;
