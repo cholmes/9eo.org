@@ -26,7 +26,7 @@ There are now two published RFP’s, to kick off this process for us.
 
 The first is the [STAC Website RFP](https://docs.google.com/document/d/1N3HNLh0et1Z18nFHfQJfvgAsAkX-cKIQMYP7VcvmGzQ/edit), which aims to redo [stacspec.org](http://stacspec.org) to better serve as the foundational learning place for STAC. We’d like it to be mobile-friendly, accessible, internationalized, and much easier for anyone to contribute to. It should use a real web framework, and be designed so it’s much easier for anyone to contribute. It will serve as the foundation for lots of documentation work in the future, where we’re able to get anyone up to speed with all STAC offers. We decided to just focus on the more ‘structural’ pieces, giving us a clean, well-designed framework that makes it easy to add new content. We hope to do a future RFP for a deeper user journey and information architecture to really understand STAC users and explain it to them, but we figured we should get the framework in place and let the community develop a bit more.
 
-- [**STAC Website RFP](https://docs.google.com/document/d/1N3HNLh0et1Z18nFHfQJfvgAsAkX-cKIQMYP7VcvmGzQ/edit) **— Responses due August 31st.
+- [**STAC Website RFP](https://docs.google.com/document/d/1N3HNLh0et1Z18nFHfQJfvgAsAkX-cKIQMYP7VcvmGzQ/edit)** — Responses due August 31st.
 
 ### STAC Validation Enhancements
 

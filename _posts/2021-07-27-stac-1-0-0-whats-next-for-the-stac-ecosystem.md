@@ -40,11 +40,11 @@ The general plan for STAC Ecosystem 1.0.0 is the [‘tier 1’ items of the STAC
 
 In addition to the [STAC 1.0.0 implementations](https://medium.com/radiant-earth-insights/stac-1-0-0-software-ecosystem-updates-da4e800a4973#be26) funded, there are a number of key projects the STAC PSC has funded so far:
 
-[**PySTAC 1.0.0](https://pystac.readthedocs.io/en/1.0/) — **As the leading foundational library for STAC, in the most commonly used programming language for geospatial, it’s important that PySTAC is fully stable and up to spec. So funding was provided for the key tasks for it to reach 1.0.0.
+[**PySTAC 1.0.0](https://pystac.readthedocs.io/en/1.0/) —** As the leading foundational library for STAC, in the most commonly used programming language for geospatial, it’s important that PySTAC is fully stable and up to spec. So funding was provided for the key tasks for it to reach 1.0.0.
 
 [**STAC API Beta.2](https://medium.com/p/ea7d321db84d/edit) and beta.3 releases** — While STAC core reached 1.0.0, the API has lagged a bit behind, so ensuring it is also quite stable is also a big priority. STAC 1.0.0 funding helped get beta.2 out the door as well as progress on beta.3. It also funded several implementations to try out [CQL support](https://www.ogc.org/standards/requests/229) so that the beta.2 changes would be based on real implementation feedback.
 
-**Leaflet plugin for STAC — **And in progress is work one or two plugins for Leaflet that can work easily with STAC JSON objects. The primary aim is to use it in STAC Browser, but it’s being implemented in a way that those are reusable open-source plugins for anyone to use.
+**Leaflet plugin for STAC —** And in progress is work one or two plugins for Leaflet that can work easily with STAC JSON objects. The primary aim is to use it in STAC Browser, but it’s being implemented in a way that those are reusable open-source plugins for anyone to use.
 
 ### Funding Plans
 
@@ -60,7 +60,7 @@ The STAC PSC has also set a number of priorities to fund with remaining funding,
 
 **Enhanced Validation Tools** — There are a number of great options for validating STAC, but they only report ‘pass’ or ‘fail’. With STAC there are a number of best practices that we ideally guide people to by giving them ‘warning’ type feedback when they go to validate. We’re almost done with an RFP to fund this.
 
-**STAC Browser **— A core upgrade of STAC Browser is being led by Matthias Mohr as part of his Radiant Earth Technical Fellowship, and it’s coming along quite nicely. The PSC hopes to fund additional feature enhancements, like the full search of STAC API collection `/items`endpoints, to bring more contributors into the project so that it builds a real community.
+**STAC Browser** — A core upgrade of STAC Browser is being led by Matthias Mohr as part of his Radiant Earth Technical Fellowship, and it’s coming along quite nicely. The PSC hopes to fund additional feature enhancements, like the full search of STAC API collection `/items`endpoints, to bring more contributors into the project so that it builds a real community.
 
 ### Growing the Community
 

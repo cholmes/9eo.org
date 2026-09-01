@@ -22,7 +22,7 @@ The idea with the awards was to encourage and recognize key contributions to the
 
 ## Ecosystem Awards
 
-**Community Prize: **[stacindex.org](http://stacindex.org), from Matthias Mohr, was selected by the community of contributors to win the $5000 ecosystem prize.
+**Community Prize:** [stacindex.org](http://stacindex.org), from Matthias Mohr, was selected by the community of contributors to win the $5000 ecosystem prize.
 
 ![](https://miro.medium.com/v2/resize:fit:1400/1*qQgXZypRSr90UWd8mQVsFQ.gif)
 
@@ -34,7 +34,7 @@ It’s a project that clearly demonstrates the future for STAC, pulling together
 
 The next set of prizes were made to be an alternative to our practice of sponsoring travel for new people to join our in-person sprints. These grants give winners $1000 to help them spend time in the community, and also reserve travel money for our next in-person sprint. We decided to give out two of these, and the other two will be awarded at the next sprint.
 
-**Aimee Barciauskas **won one of the newcomer grants. She supported the NASA Space Apps COVID Challenge by putting up a number of great datasets as Cloud Optimized GeoTIFF’s on the [AWS Registry of Open Data](https://aws.amazon.com/opendata/), and gave a great [lightning talk](https://youtu.be/XTkNhGpfmB8?t=5890) on the work. She also gave a nice [intro session](https://youtu.be/aaKlxXJ0AcI) on a new public [Sea Surface Temperature](https://registry.opendata.aws/mur/) dataset that is stored in [Zarr](https://zarr.readthedocs.io/en/stable/), with lots of great detail on what Zarr is all about. SparkGeo and Planet sponsored this award.
+**Aimee Barciauskas** won one of the newcomer grants. She supported the NASA Space Apps COVID Challenge by putting up a number of great datasets as Cloud Optimized GeoTIFF’s on the [AWS Registry of Open Data](https://aws.amazon.com/opendata/), and gave a great [lightning talk](https://youtu.be/XTkNhGpfmB8?t=5890) on the work. She also gave a nice [intro session](https://youtu.be/aaKlxXJ0AcI) on a new public [Sea Surface Temperature](https://registry.opendata.aws/mur/) dataset that is stored in [Zarr](https://zarr.readthedocs.io/en/stable/), with lots of great detail on what Zarr is all about. SparkGeo and Planet sponsored this award.
 
 **Kyle Barron** won the other newcomer award, for his work on [deck.gl-raster](https://kylebarron.dev/deck.gl-raster/) which brings raster data from Cloud Optimized GeoTIFF’s to the great [deck.gl](http://deck.gl) library. You can see it in action in [landsat8.earth](http://landsat8.earth), and I’m sure it’ll start to pop up in other places in the future.
 
@@ -48,23 +48,23 @@ The final set of awards are to recognize various contributions to the Cloud Nati
 
 - **Best Teacher** **(intro):** Dave Luo, who gave a great introduction to [Machine Learning & Satellite Imagery](https://youtu.be/Z-ycc4aAnmY), which I’m sure will be a resource for many in the future. *Sponsored by [Element84](https://www.element84.com/) & Planet*
 
-- **Best Teacher (advanced): **Rob Emanuele [introduced PySTAC](https://youtu.be/BV0s-KoZFgY), and the material lives on as [a notebook](https://github.com/stac-utils/pystac/blob/50c6ab40c33a39f8e235ea47187dad611bfaa9c8/docs/tutorials/creating-a-landsat-stac.ipynb) and [web page](https://pystac.readthedocs.io/en/latest/tutorials/creating-a-landsat-stac.html) that anyone can work through. *Sponsored by [Element84](https://www.element84.com/) & Planet*
+- **Best Teacher (advanced):** Rob Emanuele [introduced PySTAC](https://youtu.be/BV0s-KoZFgY), and the material lives on as [a notebook](https://github.com/stac-utils/pystac/blob/50c6ab40c33a39f8e235ea47187dad611bfaa9c8/docs/tutorials/creating-a-landsat-stac.ipynb) and [web page](https://pystac.readthedocs.io/en/latest/tutorials/creating-a-landsat-stac.html) that anyone can work through. *Sponsored by [Element84](https://www.element84.com/) & Planet*
 
-- **Unsung Hero: **Louisa Nakanuku-Diggs has helped in the organizing of most every STAC Sprint, and she helps with all the social media promotion of the events and milestones of the community. *Sponsored by [AWS](https://aws.amazon.com/) & Planet*
+- **Unsung Hero:** Louisa Nakanuku-Diggs has helped in the organizing of most every STAC Sprint, and she helps with all the social media promotion of the events and milestones of the community. *Sponsored by [AWS](https://aws.amazon.com/) & Planet*
 
-- **Best contribution from someone located in a [low or lower-middle income country](https://datahelpdesk.worldbank.org/knowledgebase/articles/906519): **Ashiraf Nsibambi Kyabainze joined the sprint from Uganda, helping out with a number of tasks, and starting a new project to aid labeling locales and settlements from such satellite imagery / COGs. *Sponsored by [Microsoft](https://www.microsoft.com/en-us/ai/ai-for-earth)*
+- **Best contribution from someone located in a [low or lower-middle income country](https://datahelpdesk.worldbank.org/knowledgebase/articles/906519):** Ashiraf Nsibambi Kyabainze joined the sprint from Uganda, helping out with a number of tasks, and starting a new project to aid labeling locales and settlements from such satellite imagery / COGs. *Sponsored by [Microsoft](https://www.microsoft.com/en-us/ai/ai-for-earth)*
 
-- **Best contribution to 3DEP Data on AWS: **Chris Helm made a STAC catalog for 3DEP data, as he shared in [his lightning talk](https://www.youtube.com/watch?v=XTkNhGpfmB8&list=PL3QzFgBMGnbQWbW-V09AzSfCbnf6Q87Rq&index=18&t=5343s), getting to a real implementation of the STAC Point Cloud Extension. *Sponsored by AWS*
+- **Best contribution to 3DEP Data on AWS:** Chris Helm made a STAC catalog for 3DEP data, as he shared in [his lightning talk](https://www.youtube.com/watch?v=XTkNhGpfmB8&list=PL3QzFgBMGnbQWbW-V09AzSfCbnf6Q87Rq&index=18&t=5343s), getting to a real implementation of the STAC Point Cloud Extension. *Sponsored by AWS*
 
-- **Best Lightning Talk: **Robin Fergason gave a [really interesting talk](https://www.youtube.com/watch?v=cOMkgQssVPk&list=PL3QzFgBMGnbQWbW-V09AzSfCbnf6Q87Rq&index=4&t=4537s) on the use of STAC for data from other Planets, it’s definitely worth checking out. *Sponsored by Planet*
+- **Best Lightning Talk:** Robin Fergason gave a [really interesting talk](https://www.youtube.com/watch?v=cOMkgQssVPk&list=PL3QzFgBMGnbQWbW-V09AzSfCbnf6Q87Rq&index=4&t=4537s) on the use of STAC for data from other Planets, it’s definitely worth checking out. *Sponsored by Planet*
 
-- **Community Builder: **Matt Hanson has been a consistent presence in STAC since the beginning, spreading the word and helping new people get started. *Sponsored by [Maxar](http://maxar.com)*
+- **Community Builder:** Matt Hanson has been a consistent presence in STAC since the beginning, spreading the word and helping new people get started. *Sponsored by [Maxar](http://maxar.com)*
 
-- **Community Builder (Runner-up): **We also wanted to recognize Chris Brown, for all his help in the [Data Labeling Contest](https://medium.com/radiant-earth-insights/announcing-the-winners-of-the-data-labeling-contest-9ea7e6887d06), and he’ll be receiving a STAC Hoodie in recognition of his efforts. *Sponsored by [Maxar](http://maxar.com)*
+- **Community Builder (Runner-up):** We also wanted to recognize Chris Brown, for all his help in the [Data Labeling Contest](https://medium.com/radiant-earth-insights/announcing-the-winners-of-the-data-labeling-contest-9ea7e6887d06), and he’ll be receiving a STAC Hoodie in recognition of his efforts. *Sponsored by [Maxar](http://maxar.com)*
 
 ## Bounties
 
-We’ve still not sorted out exactly how the bounties will work, but I’ll aim to write up the details and post the information when I get a chance. As mentioned above we have two more ‘newcomer grants’ to give out. And then there were a number of community awards we will look to give out in the future. These include best contribution by a Canadian (sponsored by SparkGeo), best contribution or use of [**Sentinel 2 Africa STAC/COG](https://explorer.digitalearth.africa/s2_l2a) **data, best data contributions on both AWS and Azure, and best contribution with** [zarr](https://zarr.readthedocs.io/en/stable/).**
+We’ve still not sorted out exactly how the bounties will work, but I’ll aim to write up the details and post the information when I get a chance. As mentioned above we have two more ‘newcomer grants’ to give out. And then there were a number of community awards we will look to give out in the future. These include best contribution by a Canadian (sponsored by SparkGeo), best contribution or use of [**Sentinel 2 Africa STAC/COG](https://explorer.digitalearth.africa/s2_l2a)** data, best data contributions on both AWS and Azure, and best contribution with** [zarr](https://zarr.readthedocs.io/en/stable/).**
 
 ## Additional Recognition
 

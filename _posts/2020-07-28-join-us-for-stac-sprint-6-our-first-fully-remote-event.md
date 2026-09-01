@@ -26,11 +26,11 @@ The other change will be to break it into two different ‘parts’. The first w
 
 **August 20 (thurs)** — Software Sprint day, likely with a virtual wrap-up
 
-**September 8 (tues) **— Data Sprint Kickoff and STAC Outreach Day — Lightning Talks Session & Tutorials
+**September 8 (tues)** — Data Sprint Kickoff and STAC Outreach Day — Lightning Talks Session & Tutorials
 
-**September 10 (thurs) — **Data Sprint continues
+**September 10 (thurs) —** Data Sprint continues
 
-**September 15 (tues) — **Data Sprint wrap up and prizes
+**September 15 (tues) —** Data Sprint wrap up and prizes
 
 At least that’s what we’re thinking so far — there will inevitably be some tweaks as we flesh out more details.
 

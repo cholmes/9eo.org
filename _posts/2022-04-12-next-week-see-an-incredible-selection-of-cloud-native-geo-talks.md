@@ -60,17 +60,17 @@ I’m excited we’ll have 3 full hours of lightning talks on diverse organizati
 
 We’ve also got a great set of tutorials for those who want to dive deeper into one of the topics of Cloud-Native Geospatial. These will be an hour of hands-on time with an expert, exploring a particular tool or diving deeper on a standard.
 
-- **COG’s: **Vincent Sarago kicks off the workshops with ‘Good COG/Bad COG’, which should be a great introduction to how to recognize, create and use COG’s.
+- **COG’s:** Vincent Sarago kicks off the workshops with ‘Good COG/Bad COG’, which should be a great introduction to how to recognize, create and use COG’s.
 
 - **STAC API search with CQL2:** One of the newest capabilities of STAC API is the use of the powerful [CQL 2](https://github.com/opengeospatial/ogcapi-features/tree/master/cql2) filter language. Phil Varner from Element 84, who has been leading the final push of STAC API to 1.0.0 will take participants through its capabilities.
 
-- **Zarr: **Get a great introduction to this workshop on Zarr and its capabilities (more details coming soon)
+- **Zarr:** Get a great introduction to this workshop on Zarr and its capabilities (more details coming soon)
 
 - **Pangeo Forge**: Much of the innovation around Zarr is from the [Pangeo](https://pangeo.io/) community platform, and this will be a deep dive into one of the key tools, showing users how to transform NetCDF data into cloud-optimized analysis-ready data as Zarr.
 
 - **Microsoft Planetary Computer:** Looking for a platform that does COG, STAC, Zarr, and COPC in a globally scalable, fully hosted online platform that includes a ton of open data? Search no more: Tom Augspurger will show you how to get started with it.
 
-- **stac-fastapi: **One of the leading STAC API implementations is also one of the most customizable. Join this tutorial to learn how to create your own customized STAC API using this great python project.
+- **stac-fastapi:** One of the leading STAC API implementations is also one of the most customizable. Join this tutorial to learn how to create your own customized STAC API using this great python project.
 
 - **STAC, COG, and [Coiled](https://coiled.io/)**: In a tutorial called ‘How to turn satellite data to insights at scale’ Basile Goussard from NetCarbon will share how they are using the Pangeo stack of tools to realize insights like mean land surface temperature.
 
