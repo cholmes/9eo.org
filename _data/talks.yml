@@ -1,0 +1,99 @@
+# Talks — newest first. Rendered on the home page (most recent 3) and /talks/ (all).
+# date: ISO, used for sorting. date_display: what actually shows.
+
+- title: "A Cloud Native Geo Upgrade for Spatial Data Infrastructure"
+  venue: "Open Geodag 2026"
+  venue_url: "https://www.geonovum.nl/agenda/open-geodag-2026"
+  location: "Amersfoort, NL"
+  date: 2026-05-12
+  date_display: "May&nbsp;12,&nbsp;2026"
+  abstract: "A case for replacing the traditional server-based SDI stack with cloud-native formats &mdash; COG, GeoParquet, STAC &mdash; and object storage: faster, cheaper, AI-ready, and sovereign. Portolan as a working blueprint."
+  links:
+    - label: "Talk overview"
+      url: "https://cholmes.github.io/open-geodag-presentation/"
+    - label: "Slides"
+      url: "https://cholmes.github.io/open-geodag-presentation/opengeo-dag.html#1"
+    - label: "Speaker notes"
+      url: "https://cholmes.github.io/open-geodag-presentation/presenter.html"
+
+- title: "Towards a Global Spatial Data Ecosystem"
+  venue: "Cloud Native Geospatial Conference"
+  venue_url: "https://www.youtube.com/playlist?list=PLENrKR4uOfvWAl4Y7d6cLCmmHqAJ2zN3v"
+  location: "Snowbird, UT"
+  date: 2025-04-01
+  date_display: "April&nbsp;2025"
+  abstract: "Opening keynote challenging the traditional Spatial Data Infrastructure model and arguing for a community-driven ecosystem in which governments, corporations, nonprofits, and individuals all contribute."
+  links:
+    - label: "Watch"
+      url: "https://www.youtube.com/watch?v=IA9ZvXOnPZ0"
+    - label: "Slides"
+      url: "https://docs.google.com/presentation/d/1KZwICMv0pf8hlIzgWXFR6ltruz3LBoVs5D8NEzG-g0g/edit"
+
+- title: "Towards a Cloud Native Spatial Data Infrastructure"
+  venue: "FOSS4G NA 2023"
+  location: "Baltimore, MD"
+  date: 2023-10-01
+  date_display: "October&nbsp;2023"
+  abstract: "Opening keynote on building a queryable Earth &mdash; how simple catalog services like STAC, commodity hosting, and formats like COG and PMTiles add up to a new kind of spatial data infrastructure."
+  links:
+    - label: "Watch"
+      url: "https://www.youtube.com/watch?v=ovVb_uloM7U"
+    - label: "Slides"
+      url: "https://docs.google.com/presentation/d/15wi7XAWm2gP-7Gg0hjFeRaIxS18M-mG6DVh1F8j-lgM/edit"
+
+- title: "Cloud Native Geospatial Overview"
+  venue: "Cloud-Native Geospatial Outreach 2022"
+  venue_url: "https://www.youtube.com/playlist?list=PLQsQNjNIDU87yUFyKy1seaiRps389RPwk"
+  location: "Online"
+  date: 2022-05-27
+  date_display: "May&nbsp;2022"
+  abstract: "Kickoff of the second Outreach event, with Nadine Alameh of the OGC, followed by an overview of what cloud-native geospatial is &mdash; with Howard Butler on the technical principles underneath it."
+  links:
+    - label: "Watch"
+      url: "https://youtu.be/hprPIr9Vt4M?t=972"
+
+- title: "Cloud Native Geospatial Overview"
+  venue: "Cloud Native Geospatial Outreach Day 2020"
+  venue_url: "https://www.youtube.com/playlist?list=PL3QzFgBMGnbQWbW-V09AzSfCbnf6Q87Rq"
+  location: "Online"
+  date: 2020-09-09
+  date_display: "September&nbsp;2020"
+  abstract: "An overview of cloud-native geospatial for newcomers at the first Outreach Day &mdash; what it is, and how far the community had come toward it."
+  links:
+    - label: "Watch"
+      url: "https://youtu.be/Wcz8-fCtqjk"
+
+- title: "The State of STAC"
+  venue: "Satellite Data Interoperability Workshop"
+  location: "Frascati, IT"
+  date: 2018-08-01
+  date_display: "August&nbsp;2018"
+  abstract: "Keynote introducing the SpatioTemporal Asset Catalog spec and community to an Analysis Ready Data audience &mdash; a higher-level tour of what STAC is for and where it was heading."
+  links:
+    - label: "Watch"
+      url: "https://www.youtube.com/watch?v=byO0ABXFI4I"
+    - label: "Slides"
+      url: "https://docs.google.com/presentation/d/1O6W0lMeXyUtPLl-k30WPJIyH1ecqrcWk29Np3bi6rl0/edit?usp=sharing"
+
+- title: "Towards a Queryable Earth"
+  venue: "FOSS4G North America 2018"
+  location: "St. Louis, MO"
+  date: 2018-05-15
+  date_display: "May&nbsp;2018"
+  abstract: "Keynote on making the world's imagery and geospatial data as queryable as the web &mdash; open formats, open catalogs, and the tooling that would have to exist to get there."
+  links:
+    - label: "Watch"
+      url: "https://www.youtube.com/watch?v=jxfA4WaYPrc"
+
+- title: "Getting Started with the OpenGeo Stack for SDIs"
+  venue: "GSDI-10"
+  # gsdi.org is gone, so no venue link
+  location: "Trinidad"
+  date: 2008-02-28
+  date_display: "February&nbsp;2008"
+  abstract: "Bringing together open source, spatial data infrastructures and the then-new world of Google Maps and Earth &mdash; drawn largely from a year spent working in Zambia. Also the soft launch of OpenGeo.org."
+  links:
+    - label: "Slides (PPT)"
+      url: "/assets/talks/gsdi-10-cholmes.ppt"
+    - label: "Post"
+      url: "/blog/slides-from-gsdi-10/"

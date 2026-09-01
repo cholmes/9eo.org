@@ -1,0 +1,78 @@
+---
+layout: default
+title: Talks
+description: Talks, keynotes and podcast appearances by Chris Holmes on cloud-native geospatial, open standards, and open ecosystems.
+---
+<section class="section" style="border-top: none;">
+  <div class="wrap">
+    <div class="row">
+      <div class="meta">§ Talks</div>
+      <div>
+        <h2>Talks &amp; keynotes.</h2>
+        <p style="max-width: 58ch; color: var(--ink-soft);">Conference talks and keynotes, newest first — mostly on cloud-native geospatial, open standards, and getting data into the hands of the people who need it. Slides and recordings where they survive.</p>
+
+        {% assign all_talks = site.data.talks | sort: "date" | reverse %}
+        {% for talk in all_talks %}
+        <article class="talk">
+          <div>
+            <div class="talk-title">{{ talk.title }}</div>
+            <div class="talk-venue">
+              <span>{% if talk.venue_url %}<a href="{{ talk.venue_url }}" target="_blank" rel="noopener">{{ talk.venue }}</a>{% else %}{{ talk.venue }}{% endif %}</span>
+              {%- if talk.location %}
+              <span class="dot">·</span>
+              <span>{{ talk.location }}</span>
+              {%- endif %}
+              <span class="dot">·</span>
+              <span>{{ talk.date_display }}</span>
+            </div>
+            <p class="talk-abstract">{{ talk.abstract }}</p>
+            {%- if talk.links %}
+            <div class="talk-links">
+              {%- for link in talk.links %}
+              <a href="{{ link.url }}"{% if link.url contains "://" %} target="_blank" rel="noopener"{% endif %}>{{ link.label }}</a>
+              {%- endfor %}
+            </div>
+            {%- endif %}
+          </div>
+        </article>
+        {% endfor %}
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="podcasts">
+  <div class="wrap">
+    <div class="row">
+      <div class="meta">§ Podcasts</div>
+      <div>
+        <h2>Podcasts &amp; interviews.</h2>
+        <p style="max-width: 58ch; color: var(--ink-soft);">Longer-form conversations, where the ideas get more room than a conference slot allows.</p>
+
+        {% assign all_podcasts = site.data.podcasts | sort: "date" | reverse %}
+        {% for pod in all_podcasts %}
+        <article class="talk">
+          <div>
+            <div class="talk-title">{{ pod.title }}</div>
+            <div class="talk-venue">
+              <span>{% if pod.venue_url %}<a href="{{ pod.venue_url }}" target="_blank" rel="noopener">{{ pod.venue }}</a>{% else %}{{ pod.venue }}{% endif %}</span>
+              <span class="dot">·</span>
+              <span>{{ pod.date_display }}</span>
+            </div>
+            <p class="talk-abstract">{{ pod.abstract }}</p>
+            {%- if pod.links %}
+            <div class="talk-links">
+              {%- for link in pod.links %}
+              <a href="{{ link.url }}"{% if link.url contains "://" %} target="_blank" rel="noopener"{% endif %}>{{ link.label }}</a>
+              {%- endfor %}
+            </div>
+            {%- endif %}
+          </div>
+        </article>
+        {% endfor %}
+
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,19 @@
+# Podcast appearances and interviews — newest first. Rendered on /talks/.
+
+- title: "Cloud Native Geospatial"
+  venue: "The MapScaping Podcast"
+  date: 2024-07-03
+  date_display: "July&nbsp;2024"
+  abstract: "A conversation about cloud-native geospatial &mdash; what the formats change about how data gets shared, and why the shift matters beyond the technical details."
+  links:
+    - label: "Listen"
+      url: "https://www.youtube.com/watch?v=65JvwEyYcEY"
+
+- title: "Modernizing spatial data standards for everyone"
+  venue: "Matt Forrest"
+  date: 2024-06-05
+  date_display: "June&nbsp;2024"
+  abstract: "On building open standards that actually get adopted &mdash; STAC, GeoParquet, and what it takes to move a whole ecosystem rather than ship a spec."
+  links:
+    - label: "Watch"
+      url: "https://www.youtube.com/watch?v=hZgAL9hlb_k"

@@ -1,3 +1,5 @@
+---
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -219,60 +221,28 @@
       <div>
         <h2>Selected talks &amp; keynotes.</h2>
 
+{% assign recent_talks = site.data.talks | sort: "date" | reverse %}
+{% for talk in recent_talks limit: 3 %}
         <article class="talk">
           <div>
-            <div class="talk-title">A Cloud Native Geo Upgrade for Spatial Data Infrastructure</div>
+            <div class="talk-title">{{ talk.title }}</div>
             <div class="talk-venue">
-              <span><a href="https://www.geonovum.nl/agenda/open-geodag-2026" target="_blank" rel="noopener">Open Geodag 2026</a></span>
+              <span>{% if talk.venue_url %}<a href="{{ talk.venue_url }}" target="_blank" rel="noopener">{{ talk.venue }}</a>{% else %}{{ talk.venue }}{% endif %}</span>
               <span class="dot">·</span>
-              <span>Amersfoort, NL</span>
+              <span>{{ talk.location }}</span>
               <span class="dot">·</span>
-              <span>May&nbsp;12,&nbsp;2026</span>
+              <span>{{ talk.date_display }}</span>
             </div>
-            <p class="talk-abstract">A case for replacing the traditional server-based SDI stack with cloud-native formats &mdash; COG, GeoParquet, STAC &mdash; and object storage: faster, cheaper, AI-ready, and sovereign. Portolan as a working blueprint.</p>
+            <p class="talk-abstract">{{ talk.abstract }}</p>
             <div class="talk-links">
-              <a href="https://cholmes.github.io/open-geodag-presentation/" target="_blank" rel="noopener">Talk overview</a>
-              <a href="https://cholmes.github.io/open-geodag-presentation/opengeo-dag.html#1" target="_blank" rel="noopener">Slides</a>
-              <a href="https://cholmes.github.io/open-geodag-presentation/presenter.html" target="_blank" rel="noopener">Speaker notes</a>
+              {%- for link in talk.links %}
+              <a href="{{ link.url }}"{% if link.url contains "://" %} target="_blank" rel="noopener"{% endif %}>{{ link.label }}</a>
+              {%- endfor %}
             </div>
           </div>
         </article>
-
-        <article class="talk">
-          <div>
-            <div class="talk-title">Towards a Global Spatial Data Ecosystem</div>
-            <div class="talk-venue">
-              <span><a href="https://www.youtube.com/playlist?list=PLENrKR4uOfvWAl4Y7d6cLCmmHqAJ2zN3v" target="_blank" rel="noopener">Cloud Native Geospatial Conference</a></span>
-              <span class="dot">·</span>
-              <span>Snowbird, UT</span>
-              <span class="dot">·</span>
-              <span>April&nbsp;2025</span>
-            </div>
-            <p class="talk-abstract">Opening keynote challenging the traditional Spatial Data Infrastructure model and arguing for a community-driven ecosystem in which governments, corporations, nonprofits, and individuals all contribute.</p>
-            <div class="talk-links">
-              <a href="https://www.youtube.com/watch?v=IA9ZvXOnPZ0" target="_blank" rel="noopener">Watch</a>
-              <a href="https://docs.google.com/presentation/d/1KZwICMv0pf8hlIzgWXFR6ltruz3LBoVs5D8NEzG-g0g/edit" target="_blank" rel="noopener">Slides</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="talk">
-          <div>
-            <div class="talk-title">Towards a Cloud Native Spatial Data Infrastructure</div>
-            <div class="talk-venue">
-              <span>FOSS4G NA 2023</span>
-              <span class="dot">·</span>
-              <span>Baltimore, MD</span>
-              <span class="dot">·</span>
-              <span>October&nbsp;2023</span>
-            </div>
-            <p class="talk-abstract">Opening keynote on building a queryable Earth &mdash; how simple catalog services like STAC, commodity hosting, and formats like COG and PMTiles add up to a new kind of spatial data infrastructure.</p>
-            <div class="talk-links">
-              <a href="https://www.youtube.com/watch?v=ovVb_uloM7U" target="_blank" rel="noopener">Watch</a>
-              <a href="https://docs.google.com/presentation/d/15wi7XAWm2gP-7Gg0hjFeRaIxS18M-mG6DVh1F8j-lgM/edit" target="_blank" rel="noopener">Slides</a>
-            </div>
-          </div>
-        </article>
+{% endfor %}
+        <p class="talks-more"><a href="/talks/">All talks &amp; podcasts →</a></p>
 
       </div>
     </div>
