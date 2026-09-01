@@ -757,8 +757,14 @@ h1, h2, h3, h4 {
   margin: 28px auto;
   border: 1px solid var(--line);
 }
+/* Image captions: an italic paragraph on its own under a figure.
+   Matched via .post-caption, which the post layout adds only to paragraphs
+   whose entire content is one <em>. CSS alone can't express that — the
+   obvious `p > em:only-child` also matches <p><em>All</em> plus prose</p>,
+   because :only-child ignores text nodes, and the negative margin below
+   then drags that text over the paragraph above it. */
 .post-content img + em,
-.post-content p > em:only-child {
+.post-content p.post-caption > em {
   display: block;
   text-align: center;
   font-family: var(--font-mono);

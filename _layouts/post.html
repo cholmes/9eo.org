@@ -56,4 +56,20 @@ layout: default
       heading.appendChild(link);
     });
   })();
+
+  // Mark image-caption paragraphs — ones whose whole content is a single
+  // <em>. A CSS-only `p > em:only-child` can't do this: :only-child ignores
+  // text nodes, so it also matches <p><em>All</em> followed by prose</p>.
+  (function () {
+    var content = document.querySelector('.post-content');
+    if (!content) return;
+    Array.prototype.forEach.call(content.querySelectorAll('p'), function (p) {
+      var kids = Array.prototype.filter.call(p.childNodes, function (n) {
+        return n.nodeType !== 3 || n.textContent.trim() !== '';
+      });
+      if (kids.length === 1 && kids[0].nodeName === 'EM') {
+        p.classList.add('post-caption');
+      }
+    });
+  })();
 </script>

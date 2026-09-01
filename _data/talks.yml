@@ -84,14 +84,16 @@
   links:
     - label: "Watch"
       url: "https://www.youtube.com/watch?v=jxfA4WaYPrc"
+    - label: "Slides"
+      url: "https://docs.google.com/presentation/d/1baJ59-anr7iOkCWRADJbUpcbNADw_V-9/"
 
-- title: "Getting Started with the OpenGeo Stack for SDIs"
+- title: "Towards an Open Geo Web: Linking Open Source's 'Architectures of Participation' to the Global SDI Initiative"
   venue: "GSDI-10"
   # gsdi.org is gone, so no venue link
   location: "Trinidad"
   date: 2008-02-28
   date_display: "February&nbsp;2008"
-  abstract: "Bringing together open source, spatial data infrastructures and the then-new world of Google Maps and Earth &mdash; drawn largely from a year spent working in Zambia. Also the soft launch of OpenGeo.org."
+  abstract: "Why Google's private infrastructure had done more for sharing geospatial data than hundreds of national SDI initiatives &mdash; read through open source's &lsquo;architectures of participation&rsquo;. Barriers to entry, treating users as contributors, and a sketch of a &lsquo;GeoPortal 2.0&rsquo; built to invite them in. Also the soft launch of OpenGeo.org."
   links:
     - label: "Slides (PPT)"
       url: "/assets/talks/gsdi-10-cholmes.ppt"
