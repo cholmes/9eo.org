@@ -25,16 +25,15 @@
 <script data-goatcounter="https://cholmes.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 
-<!-- Analytics: Cloudflare Web Analytics (Core Web Vitals). Production only.
-     TODO: paste the beacon token from the Cloudflare dashboard, then uncomment.
+<!-- Analytics: Cloudflare Web Analytics (Core Web Vitals). Production only, so
+     local previews don't skew the real-user timings. -->
 <script>if (location.hostname === '9eo.org') {
   var b = document.createElement('script');
-  b.defer = true;
+  b.type = 'module';
   b.src = 'https://static.cloudflareinsights.com/beacon.min.js';
-  b.setAttribute('data-cf-beacon', '{"token": "PASTE_TOKEN_HERE"}');
+  b.setAttribute('data-cf-beacon', '{"token": "bdcdc3d5d8634bc7b8c3812124e8e1c7"}');
   document.head.appendChild(b);
 }</script>
--->
 </head>
 
 <body>
