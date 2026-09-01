@@ -802,6 +802,38 @@ h1, h2, h3, h4 {
 .post-foot a { color: var(--mute); }
 .post-foot a:hover { color: var(--accent); }
 
+.post-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 32px;
+  margin-bottom: 28px;
+}
+.post-nav-older { grid-column: 1; }
+.post-nav-newer { grid-column: 2; text-align: right; }
+.post-nav-link {
+  display: block;
+  min-width: 0;
+}
+.post-nav-dir { display: block; color: var(--mute); }
+.post-nav-title {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  text-transform: none;
+  color: var(--ink-soft);
+}
+.post-nav-link:hover .post-nav-dir,
+.post-nav-link:hover .post-nav-title { color: var(--accent); }
+.post-nav-all { text-align: center; }
+
+@media (max-width: 560px) {
+  .post-nav { grid-template-columns: 1fr; gap: 20px; }
+  .post-nav-older, .post-nav-newer { grid-column: 1; text-align: left; }
+}
+
 /* ============================================================
    Tweaks-panel scoping (don't let panel inherit weird styles)
    ============================================================ */

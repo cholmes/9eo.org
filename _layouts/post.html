@@ -19,7 +19,23 @@ layout: default
       {{ content }}
     </div>
     <div class="post-foot">
-      <a href="/blog/" class="naked">← All posts</a>
+      {% if page.previous or page.next %}
+      <nav class="post-nav" aria-label="Post navigation">
+        {%- if page.previous %}
+        <a class="naked post-nav-link post-nav-older" href="{{ page.previous.url }}">
+          <span class="post-nav-dir">← Older</span>
+          <span class="post-nav-title">{{ page.previous.title }}</span>
+        </a>
+        {%- endif %}
+        {%- if page.next %}
+        <a class="naked post-nav-link post-nav-newer" href="{{ page.next.url }}">
+          <span class="post-nav-dir">Newer →</span>
+          <span class="post-nav-title">{{ page.next.title }}</span>
+        </a>
+        {%- endif %}
+      </nav>
+      {% endif %}
+      <div class="post-nav-all"><a href="/blog/" class="naked">← All posts</a></div>
     </div>
   </div>
 </article>
