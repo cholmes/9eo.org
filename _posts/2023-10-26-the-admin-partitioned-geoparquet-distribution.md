@@ -140,7 +140,7 @@ The other thing I experimented a good bit with was ‘Hive partitions’. These 
 
 *[From DuckDB docs](https://duckdb.org/docs/data/partitioning/hive_partitioning.html#hive-partitioning)*
 
-As you can see it’s a simple scheme, just call the directory *<column name>*=*<value> — *like ‘year=2021’, which tells any client that every file within that directory will have a ‘year’ value of 2021. What this enables is even more ‘skipping’ of files — if you had a query that was ‘WHERE year = 2022 AND month = 12’ then the query wouldn’t need to ask the footer of every file in every other ‘year’ and ‘month’ directory. There’s many tools that will easily break up your data by the key you choose.
+As you can see it’s a simple scheme, just call the directory `<column name>=<value>` — like ‘year=2021’, which tells any client that every file within that directory will have a ‘year’ value of 2021. What this enables is even more ‘skipping’ of files — if you had a query that was ‘WHERE year = 2022 AND month = 12’ then the query wouldn’t need to ask the footer of every file in every other ‘year’ and ‘month’ directory. There’s many tools that will easily break up your data by the key you choose.
 
 My main experiments were to use ‘country_iso’ as the column to organize the hive partition on. In my first Google Buildings experiment I split up every country in the folder by admin level 1 (state / province), and was pleasantly surprised that all the hive stuff still worked.
 

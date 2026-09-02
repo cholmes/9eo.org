@@ -42,7 +42,7 @@ When all data is in a cloud location that a variety of software can work with di
 
 ### **Send Algorithms to the data, not the other way around**
 
-Once the data is in one place**, **this leads to a paradigm shift of sending algorithms *to* the data, instead of the other way around. If all of your data is in the cloud in one location, data becomes too massive to download and process locally, so users must package up their algorithms to run on the cloud. This could be a full container, like a complete Docker processing instance; but with more advanced cloud geospatial systems like RasterFoundry and Google Earth Engine a user just sends a script or a descriptions of operations to run.
+Once the data is in one place, this leads to a paradigm shift of sending algorithms *to* the data, instead of the other way around. If all of your data is in the cloud in one location, data becomes too massive to download and process locally, so users must package up their algorithms to run on the cloud. This could be a full container, like a complete Docker processing instance; but with more advanced cloud geospatial systems like RasterFoundry and Google Earth Engine a user just sends a script or a descriptions of operations to run.
 
 ![](/assets/img/posts/cloud-native-geospatial-part-1-basic-assumptions-and-workflo/0_VwTU_LALfTiN9Iun..png)
 

@@ -36,7 +36,6 @@ Soon after Till started contributing we also had [Sam Jackson](https://github.co
 
 Then he added GeoJSON support, and even implemented my desire to properly warn people if they were going to download a ‘huge ass’ GeoJSON file, and ask them if they’d prefer a format that will handle things better.
 
-<screenshot of dialog for GeoJSON>
 
 I’ve had some bad experience with GeoJSON recently, when I’ve downloaded the entire Planet SkySat catalog, where once you get into gigabytes most tools will really struggle, QGIS included. But formats like GeoParquet and FlatGeobuf will be *much* smaller (like at least 20% the size, if not 10% or less), and they’ll also perform much better if they do get to tens of gigabytes.
 

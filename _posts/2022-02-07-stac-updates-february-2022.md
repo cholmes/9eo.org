@@ -76,21 +76,21 @@ It’s an awesome milestone for the Kartoza team get this release out, and I’m
 
 And I wanted to quickly highlight a few other cool things that have bubbled up in the community.
 
-Mykola Kozyr released a [***STAC Discovery App](https://share.streamlit.io/mykolakozyr/stacdiscovery/main/app.py)*** using [Streamlit](https://streamlit.io/), that uses [kepler.gl](http://kepler.gl) to do really nice time visualizations. Check out his [tweet](https://twitter.com/MykolaKozyr/status/1482024678176837636) for some cool visualizations.
+Mykola Kozyr released a ***[STAC Discovery App](https://share.streamlit.io/mykolakozyr/stacdiscovery/main/app.py)*** using [Streamlit](https://streamlit.io/), that uses [kepler.gl](http://kepler.gl) to do really nice time visualizations. Check out his [tweet](https://twitter.com/MykolaKozyr/status/1482024678176837636) for some cool visualizations.
 
-Matthias Mohr posted a [really nice update](https://medium.com/radiant-earth-insights/the-exciting-future-of-the-stac-browser-2351143aa24b) on the future of [***STAC Browser](https://github.com/radiantearth/stac-browser)***, which he’s rewritten from the ground up for version 3.0, which has had 6 alpha versions. It’s got a refreshed user interface:
+Matthias Mohr posted a [really nice update](https://medium.com/radiant-earth-insights/the-exciting-future-of-the-stac-browser-2351143aa24b) on the future of ***[STAC Browser](https://github.com/radiantearth/stac-browser)***, which he’s rewritten from the ground up for version 3.0, which has had 6 alpha versions. It’s got a refreshed user interface:
 
 ![](/assets/img/posts/stac-updates-february-2022/1_uY9EQu14rTXzjzzEfKnKIg.jpeg)
 
 And it has lots of new additions like pagination support for APIs, visualization of asset metadata, a new sidebar to quickly browse through the Catalogs, Collections, and Items, and Client-side support for cloud-optimized GeoTiffs (COGs). And my favorite improvement is that its URL’s are now far more human-readable. To me one of the key features of STAC is to be able to give someone a link that makes it easy for them to see metadata, download the data and even visualize it right there. But in previous STAC versions that link would be something like [*https://example.com/item/91zP74yZWQw9uxj6H5KZHsiuyTUWpiT5CMDiPAoxMDMKGhJSZp5VDozYejfbqWUyQLBgsAacMz/zRJ4YVRUHsR5hDaJymynTG7HHTJGLU3yr4vKcZ434boTDXWZkurF6Tkakj4MiTvGSnuMaZE96xi8VsNzrSbXotfrWsMD9H*)](https://example.com/item/91zP74yZWQw9uxj6H5KZHsiuyTUWpiT5CMDiPAoxMDMKGhJSZp5VDozYejfbqWUyQLBgsAacMz/zRJ4YVRUHsR5hDaJymynTG7HHTJGLU3yr4vKcZ434boTDXWZkurF6Tkakj4MiTvGSnuMaZE96xi8VsNzrSbXotfrWsMD9H)). There were lots of good reasons for this, and it was a surprising amount of work to get to URL’s like [https://example.com/collections/ch.swisstopo.pixelkarte-farbe-pk25.noscale/items/swiss-map-raster25_1984_1056](https://example.com/collections/ch.swisstopo.pixelkarte-farbe-pk25.noscale/items/swiss-map-raster25_1984_1056).
 
-Qiusheng Wu added COG & STAC support to the awesome [***leafmap](https://leafmap.org/)** *project. See [his tweet](https://twitter.com/giswqs/status/1480901843253354502) for cool visualizations, and the leafmap [documentation on COG & STAC](https://leafmap.org/notebooks/03_cog_stac/?h=stac) for how to use it.
+Qiusheng Wu added COG & STAC support to the awesome ***[leafmap](https://leafmap.org/)*** project. See [his tweet](https://twitter.com/giswqs/status/1480901843253354502) for cool visualizations, and the leafmap [documentation on COG & STAC](https://leafmap.org/notebooks/03_cog_stac/?h=stac) for how to use it.
 
 ![](https://miro.medium.com/v2/resize:fit:1400/1*fQXeImFfhTprlZRngmn29Q.png)
 
-I wrote a blog post on [***Planet’s STAC support](https://medium.com/planet-stories/planet-and-spatiotemporal-asset-catalogs-186aa99ce8b7)***, including a [new catalog of open data](https://stacindex.org/catalogs/planet-labs-stac-catalog) as well as support for [STAC in the orders API](https://developers.planet.com/docs/orders/delivery/#stac-metadata).
+I wrote a blog post on ***[Planet’s STAC support](https://medium.com/planet-stories/planet-and-spatiotemporal-asset-catalogs-186aa99ce8b7)***, including a [new catalog of open data](https://stacindex.org/catalogs/planet-labs-stac-catalog) as well as support for [STAC in the orders API](https://developers.planet.com/docs/orders/delivery/#stac-metadata).
 
-Jon Duckworth released [***PySTAC 1.3.0](https://github.com/stac-utils/pystac/releases)***, which brings a number of fixes and a refresh of the documentation.
+Jon Duckworth released ***[PySTAC 1.3.0](https://github.com/stac-utils/pystac/releases)***, which brings a number of fixes and a refresh of the documentation.
 
 I also recently learned that Maxar has a lot of cool Analysis Ready Data samples available as [https://ard.maxar.com/samples/](https://ard.maxar.com/samples/).
 

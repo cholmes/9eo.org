@@ -64,7 +64,7 @@ The final set of awards are to recognize various contributions to the Cloud Nati
 
 ## Bounties
 
-We’ve still not sorted out exactly how the bounties will work, but I’ll aim to write up the details and post the information when I get a chance. As mentioned above we have two more ‘newcomer grants’ to give out. And then there were a number of community awards we will look to give out in the future. These include best contribution by a Canadian (sponsored by SparkGeo), best contribution or use of [**Sentinel 2 Africa STAC/COG](https://explorer.digitalearth.africa/s2_l2a)** data, best data contributions on both AWS and Azure, and best contribution with** [zarr](https://zarr.readthedocs.io/en/stable/).**
+We’ve still not sorted out exactly how the bounties will work, but I’ll aim to write up the details and post the information when I get a chance. As mentioned above we have two more ‘newcomer grants’ to give out. And then there were a number of community awards we will look to give out in the future. These include best contribution by a Canadian (sponsored by SparkGeo), best contribution or use of **[Sentinel 2 Africa STAC/COG](https://explorer.digitalearth.africa/s2_l2a)** data, best data contributions on both AWS and Azure, and best contribution with [zarr](https://zarr.readthedocs.io/en/stable/).
 
 ## Additional Recognition
 
