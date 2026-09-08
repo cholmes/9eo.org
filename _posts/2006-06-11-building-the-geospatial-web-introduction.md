@@ -30,8 +30,6 @@ Over the next bunch of posts I hope to explore in depth what can be done in the 
 
 ## The posts that followed
 
-The series ran through the second half of 2006 and worked through the four areas above, though not in the order they are listed. Links added later, since the original post pointed forward without saying where to.
-
 **Metadata – creation and updating**
 
 - [The Metadata problem.  Or, the problem with metadata](/blog/the-metadata-problem-or-the-problem-with-metadata/) — 16 June 2006
