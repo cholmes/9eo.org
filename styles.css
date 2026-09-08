@@ -750,7 +750,8 @@ h1, h2, h3, h4 {
 @media (prefers-reduced-motion: reduce) {
   .heading-anchor { transition: none; }
 }
-.post-content img {
+.post-content img,
+.post-content video {
   max-width: 100%;
   height: auto;
   display: block;
@@ -764,6 +765,7 @@ h1, h2, h3, h4 {
    because :only-child ignores text nodes, and the negative margin below
    then drags that text over the paragraph above it. */
 .post-content img + em,
+.post-content video + em,
 .post-content p.post-caption > em {
   display: block;
   text-align: center;
