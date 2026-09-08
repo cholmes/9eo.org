@@ -25,3 +25,28 @@ The four areas where I initially see architectures of participation being applie
 If these four things come in to place, we will start to have holarchy of participation around geospatial data. I believe we will no longer talk about building 'spatial data infrastructures', but that things will just come together in an integrated web of information. It will no longer be a matter of paying people to learn how to fill out metadata and put their data online, but instead citizens will ask the question 'why isn't this data available?', just like we now wonder how companies and governments don't have a web presence. The SDI builders should focus on enabling bottom up participation, innovating to enable a new kind of infrastructure, instead of relying on past tech metaphors.
 
 Over the next bunch of posts I hope to explore in depth what can be done in the geospatial domain to bring more participation. I believe that if done right it will enable what we dream of, and more.
+
+---
+
+## The posts that followed
+
+**Metadata – creation and updating**
+
+- [The Metadata problem.  Or, the problem with metadata](/blog/the-metadata-problem-or-the-problem-with-metadata/) — 16 June 2006
+- [Architectures of Participation for metadata](/blog/architectures-of-participation-for-metadata/) — 23 June 2006
+- [Against Catalogs](/blog/against-catalogs/) — 2 July 2006
+
+**Distribution of data**
+
+- [Distribution of Geodata](/blog/distribution-of-geodata/) — 17 July 2006
+
+**Geospatial data – generation and maintenance**
+
+- [Architectures of Participation for Geospatial Data (intro)](/blog/architectures-of-participation-for-geospatial-data-intro/) — 23 July 2006
+- [AoP for Geospatial Data, via Weber](/blog/aop-for-geospatial-data-via-weber/) — 1 August 2006
+- [Why isn’t collaborative geodata a big deal already?](/blog/why-isnt-collaborative-geodata-a-big-deal-already/) — 19 August 2006
+- [Re: Why isn’t collaborative geodata a bigger deal already?](/blog/re-why-isnt-collaborative-geodata-a-bigger-deal-already/) — 4 September 2006
+
+**Software for geospatial (open source)**
+
+- [Proprietary vs. FOSS in the Geospatial Web](/blog/proprietary-vs-foss-in-the-geospatial-web/) — 1 October 2006
