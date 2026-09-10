@@ -10,11 +10,13 @@
   abstract: "A case for replacing the traditional server-based SDI stack with cloud-native formats &mdash; COG, GeoParquet, STAC &mdash; and object storage: faster, cheaper, AI-ready, and sovereign. Portolan as a working blueprint."
   links:
     - label: "Talk overview"
-      url: "https://cholmes.github.io/open-geodag-presentation/"
+      url: "/talks/open-geodag-2026/"
     - label: "Slides"
-      url: "https://cholmes.github.io/open-geodag-presentation/opengeo-dag.html#1"
+      url: "/talks/open-geodag-2026/opengeo-dag.html#1"
     - label: "Speaker notes"
-      url: "https://cholmes.github.io/open-geodag-presentation/presenter.html"
+      url: "/talks/open-geodag-2026/presenter.html"
+    - label: "Cost calculator"
+      url: "/talks/open-geodag-2026/calculator.html"
 
 - title: "Towards a Global Spatial Data Ecosystem"
   venue: "Cloud Native Geospatial Conference"

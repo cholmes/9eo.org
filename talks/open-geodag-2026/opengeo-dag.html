@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portolan — Cloud-Native SDI</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="deck-stage.js"></script>
+
+<script type="application/json" id="speaker-notes">
+[
+  "Thank you so much for inviting me to share my thoughts on the future of geospatial data infrastructure. I've known Rob for many years from my time on the OGC board, and it's been great catching up this morning with people I know from various open communities. I moved to the Netherlands about nine months ago, living in Amsterdam and working in Haarlem. It's been awesome living here, and I've long been a fan of Geonovum, so it's a real pleasure to be here with you all. As you'll see, preparing for this talk gave me an opportunity to dig much deeper into the Dutch National SDI and I've been incredibly impressed by what you all have built. And thanks for letting me speak in English, I plan to learn Dutch, but it's been very busy at work since I moved.",
+  "I work for Planet, a satellite company that images the entire earth every single day. It's a great company, and if you've not heard of it you should check it out. But today I'm going to talk about a topic I've been working towards for my entire career. ",
+  "I got my start as the first lead developer of GeoServer, almost 25 years ago. I did the early code for it to serve as reference implementation of the Web Feature Service specification, and always appreciated that we were working to make geospatial data truly available for analysis, not just sharing maps. ",
+  "I spent a year on a fellowship in Zambia in 2004, where I got a chance to really dig into the potential of Spatial Data Infrastructure. And then a few years later I became involved in some early implementations of INSPIRE. We spent a lot of time trying to improve GeoServer to map from databases to the interoperable application schemas. I loved the vision of INSPIRE, and really admired that Europe invested so much to make it happen. But I don't think the infrastructure ever really delivered on its promise. There are a lot of great national SDI's, but there's still a lot of friction to get data, and even more to publish it.",
+  "The vision that animated INSPIRE was genuinely compelling. A federated European spatial data infrastructure — discoverable, interoperable, openly accessible to all. But I believe that a 'better' SDI from what we have today is possible. I see five different ways we could 'upgrade'.",
+  "Let's start with the most interesting one first. Our infrastructure was not built with AI or agents in mind. But it's fast becoming the way many people interact with the world. The current SDI software is mostly slow API's and javascript portals. This isn't the way AI wants to interact with the data. What AI wants is to just get the full data as quickly as possible, along with as much useful metadata about what the data represents. So we need to upgrade our SDI's so AI is a first-class citizen, as it can make spatial data much more accessible and useful to a much wider number of people.",
+  "The second requirement is ease of implementation. Getting data into a compliant SDI today is a serious undertaking. You need to convert data to the right schemas, stand up WMS and WFS services, manage databases, keep services running. That requires database administrators, web service experts, and staff on call. There's been a vision that any government agency, even a small town, could be part of the SDI. Today that's not realistic, but I believe we can drastically lower the barrier for non-experts to share their data.",
+  "The rise of AI means that services must support agents as well as humans. And AI agents don't just query an API once — they make many requests in order to suck down entire datasets. In the current paradigm, that means spinning up more servers and more clusters just to stay available to the public. Your SDI can become a victim of its own success. The ideal infrastructure should handle any amount of traffic without breaking a sweat.",
+  "That scalability can't come at a massive price. Sharing data publicly is a public good — it shouldn't be an organizational burden. Storage costs, server costs, staff costs — they add up fast. And if a dataset becomes very popular it shouldn't cause a budget shortfall.",
+  "We're seeing a growing and important movement to prioritize having control over the full stack of software and services within a country. I believe this matters deeply, and I'm glad it's gaining traction here in Europe. Critical digital infrastructure like SDI's should not be dependent on foreign clouds and software vendors.",
+  "So that's my take of what a better SDI would look like. And I believe that almost all the technology needed to enable this is already developed. It's the ecosystem called Cloud Native Geospatial, and I'll give a brief tour to be sure we're all on the same page.",
+  "At the heart of the ecosystem is a set of formats that eliminate the need for a server. Instead, they leverage the intrinsic capabilities of cloud storage to serve data efficiently, at scale. I believe these provide the right foundation to fundamentally upgrade how SDI's work.",
+  "Cloud Optimized GeoTIFF's proved out this approach of streaming geospatial data on the cloud instead of passing it around or requiring a big web server.",
+  "Zarr excels at multi-dimensional data, and there's now petabytes of data on weather & climate modeling. And ESA is transitioning all Copernicus Sentinel missions to Zarr as their new cloud-native standard format.",
+  "COPC is a bit newer, and uses the exact same COG playbook - take an established format and organize it better for the cloud.",
+  "GeoParquet provides vector data, leveraging the Parquet format that has become standard for any large non-geospatial data. Most SQL engines now can stream from it directly as a remote table, and GeoParquet provides geospatial types.",
+  "PMTiles is the visualization complement — where GeoParquet and COG handle analysis, PMTiles handles display. It packages map tiles into a single file that clients read directly from storage. No tile server needed.",
+  "STAC is the metadata layer that ties everything together. It's simple JSON that describes any cloud-native geospatial asset — a COG, a GeoParquet file, a point cloud. You can search STAC collections through an OGC Features API, or go fully serverless with STAC-GeoParquet, which puts the entire catalog into a queryable file on object storage.",
+  "So we have these powerful formats. They've mostly been used independently — COG for better raster distribution, STAC for satellite imagery catalogs. But what if we brought them all together into a coherent architecture for SDI?",
+  "We decided to go beyond just a thought experiment, leveraging Claude Code and Cowork to build a complete set of tools to prove out this concept. This idea is quite centered in the Netherlands, with a collaborator named Nissim who is based in The Hague leading the charge. And a key enabling technology is a powerful, lightweight database called DuckDB which is backed by a company in Amsterdam. I'm going to share some super early demos of what we've built, and then conclude with the ways that this approach can build a better SDI.",
+  "This is the landing page. If you want to check it out while I talk you can snap this QR code and go to the site.",
+  "It's similar to other data portals, you can see all the different data providers and layers to explore. Before I dive deep into it I want to say that the reason we were able to pull this together so quickly is due to all the deep, hard work that you all have done to make data available and document it all. You'll see a lot of familiar things throughout, as I liberally borrowed from all the great work that makes up the Dutch SDI, spending a lot of time on PDOK, which is the best geospatial data portal I've seen in my career. The key thing that I did was translate all the data into the cloud native formats, which in turn enable a high degree of interactivity on the web. There are zero servers powering anything that you're seeing, it's all done with these cloud native formats. You can explore datasets directly in context, with default styles that are part of the infrastructure and easily reusable by others. For this demo I just sucked down a subset of all the data on PDOK, but I tried to get a decently representative sample.",
+  "I apologize that I did most of it in English - I was working quickly and needed to be able to read the summaries. But everything should work just as well in Dutch. So this is showing that the cloud-native interactivity is not just with the map - it also works with non-spatial properties, enabling you to view and filter attributes directly online. For now I've just limited it to smaller subsets of the data, but a full-fledged environment to interact with the entire dataset is possible. I believe it's important to easily get a sense of the data without having to talk to an API or download the full thing.",
+  "And you can interact with large datasets, all without servers. This is 11 million buildings, all stored as a single PMTiles on cloud storage. You can zoom in anywhere and see the full resolution data, and change the styling of the data dynamically. This is just a naive PMTiles translation - there are more advanced techniques to provide nicer overviews, as you can see it looks a bit weird when you're zoomed out. But I'd much prefer to have some indicator of where data is, even if it's a bit off. Making even better defaults is one of the areas we'll be exploring more.",
+  "This shows off how you can visualize cloud-native data with different styles. This is one of the things we're pioneering, to have style files as part of the STAC entry. For those with lots of OGC experience this was what the SLD spec hoped to do, but it hasn't updated for the modern geospatial world. This is using a mapbox style, but it's emerged as a de facto standard, with OpenLayers and MapLibre both supporting it.",
+  "You can see what one looks like, it's just a bunch of json.",
+  "The key is that we provide it as an artifact that's linked to and available for anyone.",
+  "We can also handle raster imagery, using COG's or Zarr. I downloaded a bunch of aerial imagery and reprocessed it to be more cloud native. So you can navigate down to what you want, zoom in to full resolution, and download it. One thing I like is that everything is bookmarkable and shareable - everything has its own resource online.",
+  "You can also use a more map-first interface like STAC map. And there's lots of other tools that support STAC, so if you put data in portolan then many other tools will be able to understand it. A map first interface like this makes it easier to navigate to where you want, like an aerial photo of where we are today.",
+  "So I want to show a bit of what's under the hood. You can view the source of any page, and changing anything is just editing these files. All the interactivity of the maps is due to the cloud native formats. A key thing with this is that this particular view is just one possible way to view the same data. So this text file has all the information and links, and can be used by many different tools.",
+  "This separation of data from presentation makes it easy to change how the web interactions look. I did some customization of the portolan viewer for this demo. You can see our generic browser, which has a different color scheme, and it gives a list of catalgos and let's you can point at any portolan catalog. And then you can also see it in STAC Browser, which is a more generic tool, but works great with this, since it's all STAC. It's easy to make use of STAC Browser and then customize it for your own look and feel.",
+  "So all of this works by directly putting data on an object store like amazon s3. But I used a nicer tool built on top of aws, called source cooperative. It's the main project of Radiant Earth, who started STAC and run the Cloud Native Geospatial forum. Think of it like GitHub for data. I love it because it's free hosting for any open data, they've got about 5 petabytes up there, so the 50 gigabytes I put up for this are nothing.",
+  "For Portolan we made readme's for everything, so that you can easily use the source coop interface and understand what's on it. And then you also will see my latest experiment, with the llms.txt to communicate directly with AI agents. The cloud native formats are ideal for agents to work with, so my hypothesis has been that if we just point the agents in the right direction with cloud native geospatial that it will do incredible things.",
+  "I tested this hypothesis last week, and the results were quite compelling. I started with this prompt, to just explore the buildings data.",
+  "The weird start of the prompt is using a 'skill'. Setting this up is a bit specialized, but I am optimistic that within a few months the special prompt won't be needed. But what this prompt relies on is the reading-portolan 'skill'. I used the web version, so I had to upload it, but you can also easily install it in other environments.",
+  "And it started plugging away. Installing various dependencies and querying the data to understand it. The skill tells it what tools it needs to make sense of cloud native geospatial data.",
+  "It didn't manage to make any visualizations, but it gave a ton of interesting insight into the dataset. It's a gigabyte of data, but it can all be queryed directly by Claude using DuckDB, since it can stream GeoParquet data. Claude inspected the data and made sense of the columns and then ran a bunch of analysis. It pulled out insights on permitting / construction, buliding use - that 50% are residential and 10% commercial, timelines, including finding a dip in construction with world war II, largest buildings - guessing that the top ones were huge greenhouse complexes treated as single buildings, average footprint by building function, and more.",
+  "It also ended with some compliments on the dataset - its formatting, projection, and license, which I appreciated. And I thought its follow-up suggestions were cool, especially for users who aren't GIS nerds but who just want to explore the data.",
+  "So I took its first suggestion, to see if it could do some spatial analysis with the buildings and the national parks. And I asked for some graphs, visualizations and maps.",
+  "This time I encouraged it to make me visualizations and maps. It chugged along for awhile, sharing insights along the way as it explored, and this time it spit out a html file for me to load up.",
+  "The results were pretty awesome. What I'm showing now is the complete results, embedded into this presentation. It gave some nice summary stats about parks and the number of buildings inside, and some nice charts to visualize the data. And the live map is pretty awesome (select a few from the drop down, then click on the top one on 'the full ranking'). It did a nice job styling the PMTiles, and it lets you control the layer nicely, with nice interactivity.",
+  "So I decided to have it take another go, this time taking the monuments dataset that's just points and doing some spatial joins with the buildings, but keeping with the national park theme. You can see its dialog with me as it ran through things. I will note these weren't 'instant' results, more go get a coffee and come back and see what happened. It's doing deep spatial analysis with many queries to multiple datasets, and surfacing interesting insights.",
+  "And again it came up with something really compelling. It pulled out a bunch of interesting higher level statistics, like average construction year and oldest match. It explained the results of the joining, that archeology doesn't match buildings. I thought the construction era graph was interesting, and made sense that it's the older buildings that are monuments, then info on the largest and oldest ones. And then it made a compelling map, with all three layers. Note that I only did the most minimal of iterations on these, it was mostly what developers call a 'one-shot' where it got compelling results without having to keep telling it what to do. But of course you could continue to interact with Claude to customize it to do whatever you can imagine - add aerial imagery, 3d views, better map controls, or join more datasets.",
+  "The core thing that enables it all is the architecture of cloud native tools plus open source software. LLM's do much, much better with code that is open, since there is so much more to train on. So making full mapping applications is much easier, this is an app I didn't even ask for as I was asking about tulips. And I think interacting with SDI's is going to shift from one or two applications to everyone just creating their own web apps to do exactly what they want.",
+  "Or even more likely is it'll shift to just directly interacting with the data through chat. I started with a simple question about tulips, but then just started asking questions about crops in the netherlands in general.",
+  "The initial results were less interesting to me with all the grasslands, so I just asked it to focus on crops. It brought up cool insights, putting it into interactive graphs, by count and by area, and higlighting some interesting facts, interpreting the data into more meaningful information. I had also pointed it at the root of the Portolan catalog, so it knew to look there to find other layers, and it automatically found and pulled the provinces layer for the per province statistics. I think this is the future of spatial data infrastructure, where it powers much more accurate results in AI by making the data fully accessible.",
+  "And I believe we're actually most of the way there. Cloud-native geospatial formats are widely adopted, and Portolan brings it all together to bridge the gap between AI and spatial data. And I believe that once we get sufficient good data in these formats that we won't even need special ai 'skills' - our SDI's will be part of the overall information infrastructure that everyone can access through AI. So let me now go back to our five requirements and show how Portolan answers each one.",
+  "Portolan is built around simple text documents and command-line tools, which is exactly what AI wants to interact with. When there is already a deep investment in creating great data models and documentation, like you all have done, it is easy to distill the available information in to clear texts that direct AI on how to make use of the data. The core idea is to guide AI to the right information and data, so portolan provides best practices for how to do that.",
+  "AI is incredibly good at translating any natural language request into the exact query for GeoParquet, so this architecture makes vector data directly available for questions, and easy to build applications around. The core accessibility and AI-first design make it much easier to incorporate into world models, geospatial foundation models, and agentic tools.",
+  "The standardized core means other tools can interact with it easily. You get a great data browser, map, and QGIS plugin for free. I believe this ecosystem will rapidly develop more capabilities so you have fully interactive tools for users with very little effort.",
+  "Command-line tools and static text files are where AI tooling shines, so you can use Claude or OpenAI agents to just point at a collection of files and it will easily understand all that it can and translate into the structure of Portolan. The time I spent on getting the data ready for this site was hours, not days or weeks - I could lean on claude to do most all the tedious work. And it should get even easier, where most anyone with well formatted and documented data could publish it in hours. And the AI tools can also help formatting and documenting it.",
+  "Since Portolan's architecture is built on static files the scalability is handled by the cloud provider. This means its ability to scale is almost infinite, at tiny fractions of the costs of running clusters of ArcGIS Server or GeoServer.",
+  "There are only two costs to run a Portolan SDI — storage and egress. Storage is incredibly cheap for vector data, on the order of dollars per month. Large raster or point cloud sets can cost more, but it's a fraction of the price of running a server. Larger providers also have a feature called 'requestor pays' where users are the ones to pay the egress costs, and Source Cooperative will host open government data for free. I have no idea what realistic data transfer estimates are. If anyone does know realistic numbers for any of these then shout it out, and I can plug it in. I made it so this can be edited. And it also has a Dutch provider, a German provider and Amazon, so you can compare sovereign options.",
+  "A Portolan implementation doesn't depend on any foreign vendor for geospatial software since there are no servers and everything is open source. The key point is that even the cloud storage layer can be fully sovereign. Cloud-native doesn't mean big cloud — this architecture just needs S3-compatible storage, and there are now many European providers. Though do note that the European providers may not quite offer the infinite scalability of AWS, but the simple architecture means they should scale quite well.",
+  "Portolan is an open-source, community-governed project — no single organization controls it. We are looking for early adopters who want to help prove the model. The Netherlands is the ideal place to do this. You have strong open data culture, technical capacity, and geospatial ambition. A Dutch government Portolan implementation would be the first real proof point — and a model for SDIs across Europe, and the world. We'd love to work with you.",
+  "I built this deck as just a set of HTML pages, so just go to the URL and you'll see this page, which links to the deck, the speaker notes, the main demo, and also the AI-generated HTML pages I showed."
+]
+</script>
+
+<style>
+  :root {
+    --navy:   oklch(16% 0.04 240);
+    --navy2:  oklch(22% 0.05 240);
+    --navy3:  oklch(28% 0.05 238);
+    --gold:   oklch(75% 0.16 75);
+    --gold2:  oklch(68% 0.14 75);
+    --white:  oklch(97% 0.005 240);
+    --offwhite: oklch(93% 0.008 240);
+    --muted:  oklch(60% 0.02 240);
+    --text-dark: oklch(14% 0.02 240);
+
+    --font-sans: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'DM Mono', 'Courier New', monospace;
+
+    /* TYPE SCALE (px at 1920×1080) */
+    --t-display: 108px;
+    --t-title:   72px;
+    --t-subtitle: 48px;
+    --t-body:    36px;
+    --t-small:   28px;
+    --t-label:   24px;
+    --t-micro:   24px;
+
+    /* SPACING */
+    --px: 110px;
+    --pt: 90px;
+    --pb: 90px;
+    --gap-title: 56px;
+    --gap-item:  32px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-sans);
+    background: #000;
+  }
+
+  deck-stage {
+    --slide-bg: var(--navy);
+  }
+
+  /* ── SLIDE BASE THEMES ─────────────────────────────────── */
+  section {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    font-family: var(--font-sans);
+    color: var(--white);
+    overflow: hidden;
+  }
+
+  .slide-dark { background: var(--navy); }
+  .slide-dark2 { background: var(--navy2); }
+  .slide-mid  { background: var(--navy3); }
+  .slide-light {
+    background: var(--offwhite);
+    color: var(--text-dark);
+  }
+  .slide-gold {
+    background: var(--gold);
+    color: var(--text-dark);
+  }
+  .slide-white {
+    background: var(--white);
+    color: var(--text-dark);
+  }
+
+  /* ── LAYOUT HELPERS ───────────────────────────────────── */
+  .pad {
+    padding: var(--pt) var(--px) var(--pb);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pad-center {
+    padding: var(--pt) var(--px) var(--pb);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* ── TYPOGRAPHY ───────────────────────────────────────── */
+  .eyebrow {
+    font-size: var(--t-label);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+  }
+  .slide-light .eyebrow,
+  .slide-white .eyebrow { color: var(--gold2); }
+
+  .display {
+    font-size: var(--t-display);
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+  }
+
+  .title {
+    font-size: var(--t-title);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--gap-title);
+  }
+
+  .subtitle {
+    font-size: var(--t-subtitle);
+    font-weight: 300;
+    line-height: 1.3;
+    color: var(--offwhite);
+  }
+  .slide-light .subtitle,
+  .slide-white .subtitle { color: oklch(35% 0.02 240); }
+
+  .body { font-size: var(--t-body); font-weight: 400; line-height: 1.5; }
+  .small { font-size: var(--t-small); font-weight: 400; line-height: 1.5; }
+  .muted { color: var(--muted); }
+  .slide-light .muted,
+  .slide-white .muted { color: oklch(48% 0.02 240); }
+
+  .gold { color: var(--gold); }
+  .slide-light .gold,
+  .slide-white .gold { color: oklch(52% 0.14 75); }
+
+  .mono {
+    font-family: var(--font-mono);
+    font-size: var(--t-small);
+    background: oklch(100% 0 0 / 0.07);
+    border-radius: 6px;
+    padding: 2px 10px;
+  }
+  .slide-light .mono,
+  .slide-white .mono {
+    background: oklch(0% 0 0 / 0.07);
+  }
+
+  /* ── RULE / DIVIDER ───────────────────────────────────── */
+  .rule {
+    width: 80px; height: 3px;
+    background: var(--gold);
+    margin-bottom: 48px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .slide-light .rule { background: var(--gold2); }
+
+  /* ── GRID LAYOUTS ─────────────────────────────────────── */
+  .cols-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+  .cols-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+  }
+  .cols-5 {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 32px;
+  }
+
+  /* ── CARDS ────────────────────────────────────────────── */
+  .card {
+    background: oklch(100% 0 0 / 0.06);
+    border-radius: 12px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .slide-light .card,
+  .slide-white .card {
+    background: oklch(0% 0 0 / 0.05);
+  }
+
+  .card-label {
+    font-size: var(--t-label);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .slide-light .card-label { color: oklch(52% 0.14 75); }
+
+  .card-title {
+    font-size: var(--t-subtitle);
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .card-body {
+    font-size: var(--t-small);
+    line-height: 1.55;
+    color: oklch(85% 0.01 240);
+  }
+  .slide-light .card-body,
+  .slide-white .card-body { color: oklch(35% 0.02 240); }
+
+  /* ── REQUIREMENT PILL ─────────────────────────────────── */
+  .pill-row {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    font-size: var(--t-small);
+    font-weight: 500;
+    padding: 14px 32px;
+    border-radius: 999px;
+    border: 2px solid oklch(100% 0 0 / 0.2);
+    color: oklch(80% 0.01 240);
+    white-space: nowrap;
+  }
+  .pill.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    font-weight: 600;
+    background: oklch(100% 0 0 / 0.04);
+  }
+
+  /* ── BIG STAT ─────────────────────────────────────────── */
+  .stat-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .stat-num {
+    font-size: 120px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--gold);
+  }
+  .stat-label {
+    font-size: var(--t-body);
+    font-weight: 400;
+    color: oklch(75% 0.01 240);
+  }
+
+  /* ── FORMAT SLIDE (logo-style, centered) ──────────────── */
+  .format-slide-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0;
+  }
+
+  .format-acronym {
+    font-size: 160px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    letter-spacing: -0.04em;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 28px;
+  }
+
+  .format-fullname {
+    font-size: var(--t-subtitle);
+    font-weight: 300;
+    color: oklch(70% 0.012 240);
+    margin-bottom: 52px;
+    letter-spacing: 0.01em;
+  }
+
+  .format-desc {
+    font-size: var(--t-body);
+    font-weight: 400;
+    color: oklch(85% 0.01 240);
+    max-width: 800px;
+    line-height: 1.55;
+  }
+
+  /* ── SPLIT FORMAT SLIDE ──────────────────────────────── */
+  .format-split {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .format-split-left {
+    flex: 0 0 50%;
+    display: flex;
+    flex-direction: column;
+    padding: 80px 70px 80px 110px;
+    justify-content: space-between;
+    min-height: 0;
+  }
+
+  .format-split-logo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 36px;
+    margin-bottom: 8px;
+  }
+
+  .format-split-logo img {
+    height: 100px;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .format-split-wordmark {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .format-split-name {
+    font-size: 80px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .format-split-subtitle {
+    font-size: 28px;
+    font-weight: 400;
+    color: oklch(60% 0.02 240);
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+    margin-top: 6px;
+  }
+
+  .slide-light .format-split-subtitle {
+    color: oklch(45% 0.02 240);
+  }
+
+  .format-split-bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: auto;
+    padding-top: 48px;
+  }
+
+  .format-split-bullet {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: oklch(78% 0.015 240);
+  }
+
+  .slide-light .format-split-bullet,
+  .slide-white .format-split-bullet {
+    color: oklch(28% 0.02 240);
+  }
+
+  .format-split-bullet::before {
+    content: '•';
+    color: var(--gold);
+    flex-shrink: 0;
+    font-size: 36px;
+    line-height: 1.3;
+  }
+
+  .slide-light .format-split-bullet::before { color: oklch(52% 0.14 75); }
+
+  .format-split-right {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .format-split-right img,
+  .format-split-right video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: right top;
+    display: block;
+  }
+
+  .format-split-right .img-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    border: none;
+  }
+
+  /* vertical divider */
+  .format-split {
+    position: relative;
+  }
+
+  .format-split::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 60px;
+    bottom: 60px;
+    width: 1px;
+    background: oklch(100% 0 0 / 0.1);
+    pointer-events: none;
+  }
+
+  .slide-light .format-split::after {
+    background: oklch(0% 0 0 / 0.08);
+  }
+
+  /* Legacy – kept for non-format slides that may use these */
+  .format-badge {
+    font-size: 56px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    letter-spacing: -0.02em;
+    color: var(--gold);
+    margin-bottom: 32px;
+  }
+
+  .format-full {
+    font-size: var(--t-subtitle);
+    font-weight: 300;
+    color: oklch(80% 0.015 240);
+    margin-bottom: 48px;
+  }
+
+  /* ── SECTION HEADER ───────────────────────────────────── */
+  .section-num {
+    font-size: var(--t-label);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+  }
+
+  /* ── TABLE ────────────────────────────────────────────── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--t-small);
+  }
+  th {
+    font-size: var(--t-label);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 20px 24px;
+    border-bottom: 2px solid oklch(0% 0 0 / 0.12);
+    color: oklch(42% 0.02 240);
+  }
+  td {
+    padding: 22px 24px;
+    border-bottom: 1px solid oklch(0% 0 0 / 0.07);
+    line-height: 1.4;
+    color: var(--text-dark);
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  td.num {
+    font-family: var(--font-mono);
+    font-size: var(--t-small);
+    font-weight: 500;
+  }
+  .td-gold { color: oklch(48% 0.14 75); font-weight: 600; }
+
+  /* ── PLACEHOLDER IMAGE ────────────────────────────────── */
+  .img-placeholder {
+    background: repeating-linear-gradient(
+      45deg,
+      oklch(100% 0 0 / 0.04),
+      oklch(100% 0 0 / 0.04) 2px,
+      transparent 2px,
+      transparent 14px
+    );
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    font-family: var(--font-mono);
+    font-size: var(--t-label);
+    color: oklch(55% 0.02 240);
+    text-align: center;
+    border: 1.5px solid oklch(100% 0 0 / 0.1);
+  }
+  .slide-light .img-placeholder,
+  .slide-white .img-placeholder {
+    background: repeating-linear-gradient(
+      45deg,
+      oklch(0% 0 0 / 0.04),
+      oklch(0% 0 0 / 0.04) 2px,
+      transparent 2px,
+      transparent 14px
+    );
+    border-color: oklch(0% 0 0 / 0.1);
+    color: oklch(52% 0.02 240);
+  }
+
+  /* ── QUOTE ────────────────────────────────────────────── */
+  .quote-mark {
+    font-size: 160px;
+    line-height: 0.6;
+    color: var(--gold);
+    font-weight: 700;
+    font-family: Georgia, serif;
+    margin-bottom: 20px;
+    opacity: 0.5;
+  }
+
+  /* ── DEMO SLIDE ───────────────────────────────────────── */
+  .demo-label {
+    font-size: var(--t-label);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--gold);
+  }
+  .demo-title {
+    font-size: 96px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── NAV DOTS (hidden, deck-stage handles nav) ────────── */
+
+  /* ── FORMAT ICON ──────────────────────────────────────── */
+  .format-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 16px;
+    background: oklch(100% 0 0 / 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 32px;
+    flex-shrink: 0;
+  }
+
+  /* ── DIAGONAL SPLIT ───────────────────────────────────── */
+  .split-left {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    padding: var(--pt) 80px var(--pb) var(--px);
+    justify-content: flex-start;
+  }
+  .split-right {
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    padding: var(--pt) var(--px) var(--pb) 80px;
+    justify-content: flex-start;
+  }
+
+  /* ── CTA SLIDE ────────────────────────────────────────── */
+  .cta-url {
+    font-family: var(--font-mono);
+    font-size: var(--t-small);
+    color: oklch(65% 0.02 240);
+    margin-top: auto;
+  }
+
+  /* ── CONSISTENT SLIDE LAYOUT ─────────────────────────── */
+  /* Use .slide-content on all content slides for a fixed header position */
+  .slide-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: var(--pt) var(--px) var(--pb);
+  }
+
+  /* Header zone: pill-row + title always at top, fixed height */
+  .slide-header {
+    flex-shrink: 0;
+    margin-bottom: 48px;
+  }
+
+  .slide-header .pill-row {
+    margin-bottom: 36px;
+  }
+
+  .slide-header .slide-title {
+    font-size: 64px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .slide-header .slide-eyebrow {
+    font-size: var(--t-label);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .slide-header .slide-title-lg {
+    font-size: 72px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  /* Body zone: fills remaining space */
+  .slide-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  /* ── INTRO TWO-COL ────────────────────────────────────── */
+  .intro-body {
+    font-size: 33px;
+    font-weight: 300;
+    line-height: 1.65;
+    color: oklch(82% 0.012 240);
+    max-width: 820px;
+  }
+  .intro-body strong {
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  .slide-nav-arrow {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    z-index: 10;
+    width: 48px; height: 96px;
+    background: rgba(28, 36, 25, 0.55);
+    color: #f3eee4;
+    border: none; border-radius: 6px;
+    font-size: 36px; line-height: 1;
+    cursor: pointer;
+    opacity: 0.3;
+    transition: opacity 0.2s;
+  }
+  .slide-nav-arrow:hover { opacity: 0.9; }
+  .slide-nav-prev { left: 12px; }
+  .slide-nav-next { right: 12px; }
+</style>
+</head>
+<body>
+
+<deck-stage width="1920" height="1080">
+
+  <!-- ① OPENING TITLE -->
+  <section class="slide-dark" data-label="01 Title" style="position:relative;">
+    <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.04;" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+      <defs>
+        <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+          <path d="M 80 0 L 0 0 0 80" fill="none" stroke="white" stroke-width="0.5"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#grid)"/>
+      <g transform="translate(1600,540)" stroke="white" stroke-width="0.8" opacity="0.6">
+        <line x1="0" y1="-480" x2="0" y2="480"/>
+        <line x1="-480" y1="0" x2="480" y2="0"/>
+        <line x1="-339" y1="-339" x2="339" y2="339"/>
+        <line x1="339" y1="-339" x2="-339" y2="339"/>
+        <circle cx="0" cy="0" r="120" fill="none"/>
+        <circle cx="0" cy="0" r="240" fill="none"/>
+        <circle cx="0" cy="0" r="360" fill="none"/>
+        <circle cx="0" cy="0" r="480" fill="none"/>
+      </g>
+    </svg>
+    <div style="flex:1; display:flex; flex-direction:column; padding:var(--pt) var(--px) var(--pb);">
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+        <div style="font-size:100px; font-weight:700; line-height:1.05; letter-spacing:-0.025em; max-width:1300px; color:var(--white);">
+          A Cloud Native Geo Upgrade<br>for Spatial Data Infrastructure
+        </div>
+      </div>
+      <div style="display:flex; align-items:flex-end; justify-content:space-between;">
+        <div class="muted small">Open Geodag 2026 · May 12</div>
+        <div class="muted small">Chris Holmes</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ② PLANET — who I work for -->
+  <section class="slide-dark" data-label="02 Planet">
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+      <img src="uploads/planet_screenshot.webp" alt="Planet" style="max-width:100%;max-height:100%;object-fit:contain;">
+    </div>
+  </section>
+
+  <!-- ③ GEOSERVER — where I started -->
+  <section class="slide-dark2" data-label="03 GeoServer">
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+      <img src="uploads/geoserver_logo.webp" alt="GeoServer" style="max-width:100%;max-height:90%;object-fit:contain;">
+    </div>
+  </section>
+
+  <!-- ④ INSPIRE — the vision that drove the work -->
+  <section class="slide-dark2" data-label="04 INSPIRE">
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+      <img src="uploads/inspire_logo.webp" alt="INSPIRE" style="max-width:70%;max-height:70%;object-fit:contain;">
+    </div>
+  </section>
+
+  <!-- THE SDI GAP -->
+  <section class="slide-dark2" data-label="05 The Vision">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="slide-eyebrow">The vision</div>
+        <div class="slide-title-lg">A federated European spatial data infrastructure — discoverable, interoperable, openly accessible to all.</div>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <div style="margin-bottom:24px; letter-spacing:0.05em; text-transform:uppercase; font-size:var(--t-label); font-weight:600; color:var(--muted);">Upgrading</div>
+        <div class="pill-row">
+          <div class="pill">AI-First</div>
+          <div class="pill">Easy to Implement</div>
+          <div class="pill">Scalable</div>
+          <div class="pill">Low Cost</div>
+          <div class="pill">Sovereign</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ⑧ REQUIREMENT: AI-FIRST -->
+  <section class="slide-dark" data-label="08 AI-First">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="pill-row">
+          <div class="pill active">AI-First</div>
+          <div class="pill">Easy to Implement</div>
+          <div class="pill">Scalable</div>
+          <div class="pill">Low Cost</div>
+          <div class="pill">Sovereign</div>
+        </div>
+        <div class="slide-title">AI-First</div>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <div class="cols-2" style="gap:80px; align-items:center;">
+          <!-- Visual: big AI icon -->
+          <div style="display:flex;align-items:center;justify-content:center;">
+            <svg viewBox="0 0 320 320" width="460" height="460" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="160" cy="160" r="140" fill="oklch(100% 0 0 / 0.04)" stroke="oklch(75% 0.16 75)" stroke-width="1.5" stroke-opacity="0.25"/>
+              <!-- Central brain node -->
+              <circle cx="160" cy="160" r="36" fill="oklch(75% 0.16 75)" opacity="0.15"/>
+              <circle cx="160" cy="160" r="22" fill="oklch(75% 0.16 75)" opacity="0.6"/>
+              <!-- Outer nodes -->
+              <circle cx="160" cy="60"  r="14" fill="oklch(75% 0.16 75)" opacity="0.5"/>
+              <circle cx="247" cy="110" r="14" fill="oklch(75% 0.16 75)" opacity="0.5"/>
+              <circle cx="247" cy="210" r="14" fill="oklch(75% 0.16 75)" opacity="0.5"/>
+              <circle cx="160" cy="260" r="14" fill="oklch(75% 0.16 75)" opacity="0.5"/>
+              <circle cx="73"  cy="210" r="14" fill="oklch(75% 0.16 75)" opacity="0.5"/>
+              <circle cx="73"  cy="110" r="14" fill="oklch(75% 0.16 75)" opacity="0.5"/>
+              <!-- Connector lines -->
+              <line x1="160" y1="138" x2="160" y2="74"  stroke="oklch(75% 0.16 75)" stroke-width="2" opacity="0.4"/>
+              <line x1="180" y1="148" x2="233" y2="117" stroke="oklch(75% 0.16 75)" stroke-width="2" opacity="0.4"/>
+              <line x1="180" y1="172" x2="233" y2="203" stroke="oklch(75% 0.16 75)" stroke-width="2" opacity="0.4"/>
+              <line x1="160" y1="182" x2="160" y2="246" stroke="oklch(75% 0.16 75)" stroke-width="2" opacity="0.4"/>
+              <line x1="140" y1="172" x2="87" y2="203" stroke="oklch(75% 0.16 75)" stroke-width="2" opacity="0.4"/>
+              <line x1="140" y1="148" x2="87" y2="117" stroke="oklch(75% 0.16 75)" stroke-width="2" opacity="0.4"/>
+              <line x1="87" y1="203" x2="87" y2="117" stroke="oklch(100% 0 0 / 0.15)" stroke-width="1.5" opacity="0.5"/>
+              <line x1="233" y1="117" x2="233" y2="203" stroke="oklch(100% 0 0 / 0.15)" stroke-width="1.5" opacity="0.5"/>
+              <text x="160" y="168" text-anchor="middle" font-family="'DM Mono','Courier New',monospace" font-size="20" font-weight="700" fill="oklch(97% 0.005 240)">AI</text>
+            </svg>
+          </div>
+          <div class="format-split-bullets" style="gap:32px; margin-top:0; padding-top:0;">
+            <div class="format-split-bullet">Current SDI was not built for AI or agents.</div>
+            <div class="format-split-bullet">AI needs full data and rich metadata, fast.</div>
+            <div class="format-split-bullet">Upgrade SDI so AI is a first-class citizen.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑨ REQUIREMENT: EASY TO IMPLEMENT -->
+  <section class="slide-dark2" data-label="09 Easy to Implement">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="pill-row">
+          <div class="pill">AI-First</div>
+          <div class="pill active">Easy to Implement</div>
+          <div class="pill">Scalable</div>
+          <div class="pill">Low Cost</div>
+          <div class="pill">Sovereign</div>
+        </div>
+        <div class="slide-title">Easy to Implement</div>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <div class="cols-2" style="gap:80px; align-items:center;">
+          <!-- Visual: server stack complexity -->
+          <div style="display:flex;align-items:center;justify-content:center;">
+            <svg viewBox="0 0 320 320" width="460" height="460" xmlns="http://www.w3.org/2000/svg">
+              <!-- Stacked complexity boxes -->
+              <rect x="40" y="220" width="240" height="40" rx="6" fill="oklch(100% 0 0 / 0.08)" stroke="oklch(75% 0.16 75)" stroke-width="1.5" stroke-opacity="0.5"/>
+              <text x="160" y="246" text-anchor="middle" font-family="'DM Mono',monospace" font-size="16" fill="oklch(75% 0.16 75)" opacity="0.8">Database</text>
+              <rect x="60" y="168" width="200" height="40" rx="6" fill="oklch(100% 0 0 / 0.08)" stroke="oklch(75% 0.16 75)" stroke-width="1.5" stroke-opacity="0.45"/>
+              <text x="160" y="194" text-anchor="middle" font-family="'DM Mono',monospace" font-size="16" fill="oklch(75% 0.16 75)" opacity="0.75">WFS Service</text>
+              <rect x="80" y="116" width="160" height="40" rx="6" fill="oklch(100% 0 0 / 0.08)" stroke="oklch(75% 0.16 75)" stroke-width="1.5" stroke-opacity="0.4"/>
+              <text x="160" y="142" text-anchor="middle" font-family="'DM Mono',monospace" font-size="16" fill="oklch(75% 0.16 75)" opacity="0.7">WMS Service</text>
+              <rect x="100" y="64" width="120" height="40" rx="6" fill="oklch(100% 0 0 / 0.08)" stroke="oklch(75% 0.16 75)" stroke-width="1.5" stroke-opacity="0.35"/>
+              <text x="160" y="90" text-anchor="middle" font-family="'DM Mono',monospace" font-size="16" fill="oklch(75% 0.16 75)" opacity="0.65">Schema</text>
+              <rect x="118" y="20" width="84" height="34" rx="6" fill="oklch(100% 0 0 / 0.06)" stroke="oklch(75% 0.16 75)" stroke-width="1" stroke-opacity="0.25"/>
+              <text x="160" y="43" text-anchor="middle" font-family="'DM Mono',monospace" font-size="14" fill="oklch(75% 0.16 75)" opacity="0.5">Ops</text>
+              <!-- Danger icon -->
+              <text x="280" y="244" text-anchor="middle" font-size="28" fill="oklch(60% 0.18 30)" opacity="0.8">!</text>
+            </svg>
+          </div>
+          <div class="format-split-bullets" style="gap:32px; margin-top:0; padding-top:0;">
+            <div class="format-split-bullet">Today's SDI requires databases, services, and specialist staff.</div>
+            <div class="format-split-bullet">The barrier is too high — most organizations can't participate.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑩ REQUIREMENT: SCALABLE -->
+  <section class="slide-dark" data-label="10 Scalable">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="pill-row">
+          <div class="pill">AI-First</div>
+          <div class="pill">Easy to Implement</div>
+          <div class="pill active">Scalable</div>
+          <div class="pill">Low Cost</div>
+          <div class="pill">Sovereign</div>
+        </div>
+        <div class="slide-title">Scalable</div>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <div class="cols-2" style="gap:80px; align-items:center;">
+          <!-- Visual: scaling graph -->
+          <div style="display:flex;align-items:center;justify-content:center;">
+            <svg viewBox="0 0 340 280" width="520" height="420" xmlns="http://www.w3.org/2000/svg">
+              <!-- Axes -->
+              <line x1="50" y1="230" x2="310" y2="230" stroke="oklch(60% 0.02 240)" stroke-width="1.5"/>
+              <line x1="50" y1="230" x2="50" y2="30" stroke="oklch(60% 0.02 240)" stroke-width="1.5"/>
+              <!-- Axis labels -->
+              <text x="180" y="258" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="14" fill="oklch(55% 0.02 240)">Traffic</text>
+              <text x="22" y="130" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="14" fill="oklch(55% 0.02 240)" transform="rotate(-90 22 130)">Cost</text>
+              <!-- Danger zone -->
+              <rect x="210" y="30" width="100" height="200" fill="oklch(60% 0.18 30)" opacity="0.05" rx="4"/>
+              <!-- Server-based: steep exponential curve -->
+              <path d="M60 222 Q140 218 190 185 Q240 130 275 50" fill="none" stroke="oklch(60% 0.18 30)" stroke-width="3" stroke-linecap="round"/>
+              <text x="240" y="42" font-family="'DM Sans',sans-serif" font-size="14" fill="oklch(60% 0.18 30)" font-weight="600">Servers</text>
+              <!-- Cloud-native: flat line -->
+              <path d="M60 218 L300 205" fill="none" stroke="oklch(65% 0.17 155)" stroke-width="3" stroke-linecap="round"/>
+              <text x="305" y="200" font-family="'DM Sans',sans-serif" font-size="14" fill="oklch(65% 0.17 155)" font-weight="600">Files</text>
+            </svg>
+          </div>
+          <div class="format-split-bullets" style="gap:32px; margin-top:0; padding-top:0;">
+            <div class="format-split-bullet">AI agents crawl entire datasets, not single queries.</div>
+            <div class="format-split-bullet">More popularity means more servers — until something breaks.</div>
+            <div class="format-split-bullet">Infrastructure should scale without human intervention.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑪ REQUIREMENT: LOW COST -->
+  <section class="slide-dark2" data-label="11 Low Cost">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="pill-row">
+          <div class="pill">AI-First</div>
+          <div class="pill">Easy to Implement</div>
+          <div class="pill">Scalable</div>
+          <div class="pill active">Low Cost</div>
+          <div class="pill">Sovereign</div>
+        </div>
+        <div class="slide-title">Low Cost</div>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <div class="cols-2" style="gap:80px; align-items:center;">
+          <!-- Visual: cost breakdown -->
+          <div style="display:flex;flex-direction:column;gap:16px;align-items:stretch;min-width:300px;">
+            <div style="background:oklch(100% 0 0 / 0.06);border-radius:10px;padding:20px 28px;display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:26px;color:oklch(78% 0.012 240);">Servers</span>
+              <span style="font-size:26px;font-weight:600;color:oklch(60% 0.18 30);">always-on €€€</span>
+            </div>
+            <div style="background:oklch(100% 0 0 / 0.06);border-radius:10px;padding:20px 28px;display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:26px;color:oklch(78% 0.012 240);">Staff ops</span>
+              <span style="font-size:26px;font-weight:600;color:oklch(60% 0.18 30);">engineers €€€€</span>
+            </div>
+            <div style="background:oklch(100% 0 0 / 0.06);border-radius:10px;padding:20px 28px;display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:26px;color:oklch(78% 0.012 240);">Traffic spike</span>
+              <span style="font-size:26px;font-weight:600;color:oklch(60% 0.18 30);">emergency €€€€€</span>
+            </div>
+          </div>
+          <div class="format-split-bullets" style="gap:32px; margin-top:0; padding-top:0;">
+            <div class="format-split-bullet">Sharing public data shouldn't be an organizational burden.</div>
+            <div class="format-split-bullet">Server, staff, and licensing costs add up fast.</div>
+            <div class="format-split-bullet">Popular datasets shouldn't cause budget shortfalls.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑫ REQUIREMENT: SOVEREIGN -->
+  <section class="slide-dark" data-label="12 Sovereign">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="pill-row">
+          <div class="pill">AI-First</div>
+          <div class="pill">Easy to Implement</div>
+          <div class="pill">Scalable</div>
+          <div class="pill">Low Cost</div>
+          <div class="pill active">Sovereign</div>
+        </div>
+        <div class="slide-title">Sovereign</div>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <div class="cols-2" style="gap:80px; align-items:center;">
+          <!-- Visual: shield/Europe -->
+          <div style="display:flex;align-items:center;justify-content:center;">
+            <svg viewBox="0 0 280 320" width="400" height="460" xmlns="http://www.w3.org/2000/svg">
+              <!-- Shield shape -->
+              <path d="M140 20 L260 70 L260 180 Q260 270 140 310 Q20 270 20 180 L20 70 Z" fill="oklch(100% 0 0 / 0.05)" stroke="oklch(75% 0.16 75)" stroke-width="2" stroke-opacity="0.5"/>
+              <!-- EU star ring (simplified, 8 stars) -->
+              <circle cx="140" cy="166" r="52" fill="none" stroke="oklch(75% 0.16 75)" stroke-width="0.8" stroke-opacity="0.2"/>
+              <circle cx="140" cy="114" r="8" fill="#ffcc00" opacity="0.8"/>
+              <circle cx="177" cy="129" r="8" fill="#ffcc00" opacity="0.8"/>
+              <circle cx="192" cy="166" r="8" fill="#ffcc00" opacity="0.8"/>
+              <circle cx="177" cy="203" r="8" fill="#ffcc00" opacity="0.8"/>
+              <circle cx="140" cy="218" r="8" fill="#ffcc00" opacity="0.8"/>
+              <circle cx="103" cy="203" r="8" fill="#ffcc00" opacity="0.8"/>
+              <circle cx="88"  cy="166" r="8" fill="#ffcc00" opacity="0.8"/>
+              <circle cx="103" cy="129" r="8" fill="#ffcc00" opacity="0.8"/>
+              <!-- Central dot -->
+              <circle cx="140" cy="166" r="16" fill="oklch(75% 0.16 75)" opacity="0.4"/>
+            </svg>
+          </div>
+          <div class="format-split-bullets" style="gap:32px; margin-top:0; padding-top:0;">
+            <div class="format-split-bullet">Control the full stack within your own jurisdiction.</div>
+            <div class="format-split-bullet">SDI should not depend on foreign clouds or vendors.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑬ CLOUD-NATIVE GEO INTRO (section header) -->
+  <section class="slide-gold" data-label="13 Cloud-Native Geospatial">
+    <div class="pad-center">
+      <div class="section-num" style="color:oklch(40% 0.12 75);">Part II</div>
+      <div style="font-size:88px; font-weight:700; letter-spacing:-0.02em; color:var(--text-dark); margin-bottom:32px;">Cloud-Native<br>Geospatial</div>
+      <div class="subtitle" style="color:oklch(35% 0.04 75); max-width:800px; font-weight:400;">A community-built set of formats that eliminate the need for a server — and scale through the power of cloud storage.</div>
+    </div>
+  </section>
+
+  <!-- CLOUD-NATIVE FORMATS OVERVIEW -->
+  <section class="slide-dark" data-label="13b Cloud-Native Formats">
+    <div class="pad" style="align-items:center; text-align:center; justify-content:center;">
+      <div style="background:oklch(96% 0.005 240); border-radius:20px; padding:20px 32px; display:inline-flex; align-items:center; justify-content:center; margin-bottom:48px;">
+        <img src="uploads/cng_logo.webp" alt="Cloud-Native Geospatial" style="height:120px; width:auto; object-fit:contain;">
+      </div>
+      <div class="cols-3" style="gap:48px; width:100%; max-width:1400px;">
+        <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+          <div style="background:oklch(96% 0.005 240); border-radius:16px; padding:16px; display:flex; align-items:center; justify-content:center;">
+            <img src="uploads/cog_logo.webp" alt="COG" style="height:80px; width:auto; object-fit:contain;">
+          </div>
+          <div style="font-size:var(--t-small); font-weight:600;">COG</div>
+          <div style="font-size:18px; color:var(--muted);">Cloud-Optimized GeoTIFF</div>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+          <div style="background:oklch(96% 0.005 240); border-radius:16px; padding:16px; display:flex; align-items:center; justify-content:center;">
+            <img src="uploads/zarr_logo.webp" alt="Zarr" style="height:80px; width:auto; object-fit:contain;">
+          </div>
+          <div style="font-size:var(--t-small); font-weight:600;">Zarr</div>
+          <div style="font-size:18px; color:var(--muted);">Cloud-Native Arrays</div>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+          <div style="background:oklch(96% 0.005 240); border-radius:16px; padding:16px; display:flex; align-items:center; justify-content:center;">
+            <img src="uploads/copc_logo.webp" alt="COPC" style="height:80px; width:auto; object-fit:contain;">
+          </div>
+          <div style="font-size:var(--t-small); font-weight:600;">COPC</div>
+          <div style="font-size:18px; color:var(--muted);">Cloud-Optimized Point Cloud</div>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+          <div style="background:oklch(96% 0.005 240); border-radius:16px; padding:16px; display:flex; align-items:center; justify-content:center;">
+            <img src="uploads/geoparquet_logo.svg" alt="GeoParquet" style="height:80px; width:auto; object-fit:contain;">
+          </div>
+          <div style="font-size:var(--t-small); font-weight:600;">GeoParquet</div>
+          <div style="font-size:18px; color:var(--muted);">Columnar Vector Format</div>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+          <img src="uploads/pmtiles_logo.svg" alt="PMTiles" style="height:112px; width:auto; object-fit:contain;">
+          <div style="font-size:var(--t-small); font-weight:600;">PMTiles</div>
+          <div style="font-size:18px; color:var(--muted);">Single-File Tile Archive</div>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+          <div style="background:oklch(96% 0.005 240); border-radius:16px; padding:16px; display:flex; align-items:center; justify-content:center;">
+            <img src="uploads/stac_logo.webp" alt="STAC" style="height:80px; width:auto; object-fit:contain;">
+          </div>
+          <div style="font-size:var(--t-small); font-weight:600;">STAC</div>
+          <div style="font-size:18px; color:var(--muted);">SpatioTemporal Asset Catalog</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑪ COG -->
+  <section class="slide-dark2" data-label="14 COG">
+    <div class="format-split">
+      <div class="format-split-left">
+        <div>
+          <div class="format-split-logo" style="flex-direction:row; align-items:center; gap:28px;">
+            <div style="background:oklch(96% 0.005 240); border-radius:16px; padding:16px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <img src="uploads/cog_logo.webp" alt="COG logo" style="height:90px; width:auto; object-fit:contain;">
+            </div>
+            <div>
+              <div style="font-size:68px; font-weight:700; color:var(--white); letter-spacing:-0.02em; line-height:1;">COG</div>
+              <div style="font-size:24px; font-weight:400; color:oklch(55% 0.02 240); text-transform:uppercase; letter-spacing:0.08em; margin-top:6px;">Cloud-Optimized GeoTIFF</div>
+            </div>
+          </div>
+        </div>
+        <div class="format-split-bullets">
+          <div class="format-split-bullet">Stream raster data for visualization and analysis with just HTTP range requests — no tile server needed.</div>
+          <div class="format-split-bullet">Still a valid GeoTIFF, so every legacy tool reads it exactly as before.</div>
+        </div>
+      </div>
+      <div class="format-split-right">
+        <video src="uploads/animation2_image122.webm" poster="uploads/animation2_image122-poster.webp" preload="none" loop muted playsinline aria-label="COG demo"></video>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑫ ZARR -->
+  <section class="slide-dark" data-label="15 Zarr">
+    <div class="format-split">
+      <div class="format-split-left">
+        <div>
+          <div class="format-split-logo" style="flex-direction:row; align-items:center; gap:28px;">
+            <div style="background:oklch(96% 0.005 240); border-radius:16px; padding:16px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <img src="uploads/zarr_logo.webp" alt="Zarr logo" style="height:90px; width:auto; object-fit:contain;">
+            </div>
+            <div>
+              <div style="font-size:68px; font-weight:700; color:var(--white); letter-spacing:-0.02em; line-height:1;">Zarr</div>
+              <div style="font-size:24px; font-weight:400; color:oklch(55% 0.02 240); text-transform:uppercase; letter-spacing:0.08em; margin-top:6px;">Cloud-Native Array Format</div>
+            </div>
+          </div>
+        </div>
+        <div class="format-split-bullets">
+          <div class="format-split-bullet">Cloud-native format for multi-dimensional data cubes — think HDF5 or NetCDF, built for the cloud.</div>
+          <div class="format-split-bullet">Not backwards compatible like COG/COPC, but getting great traction in climate and earth science.</div>
+          <div class="format-split-bullet">ESA is adopting Zarr for all Copernicus Sentinel missions.</div>
+        </div>
+      </div>
+      <div class="format-split-right">
+        <video src="uploads/animation1_image112.webm" poster="uploads/animation1_image112-poster.webp" preload="none" loop muted playsinline aria-label="Zarr demo"></video>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑬ COPC -->
+  <section class="slide-dark2" data-label="16 COPC">
+    <div class="format-split">
+      <div class="format-split-left">
+        <div>
+          <div class="format-split-logo" style="flex-direction:row; align-items:center; gap:28px;">
+            <div style="background:oklch(96% 0.005 240); border-radius:16px; padding:16px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <img src="uploads/copc_logo.webp" alt="COPC logo" style="height:90px; width:auto; object-fit:contain;">
+            </div>
+            <div>
+              <div style="font-size:68px; font-weight:700; color:var(--white); letter-spacing:-0.02em; line-height:1;">COPC</div>
+              <div style="font-size:24px; font-weight:400; color:oklch(55% 0.02 240); text-transform:uppercase; letter-spacing:0.08em; margin-top:6px;">Cloud-Optimized Point Cloud</div>
+            </div>
+          </div>
+        </div>
+        <div class="format-split-bullets">
+          <div class="format-split-bullet">Stream point clouds for visualization and analysis — the COG equivalent for LiDAR data like AHN.</div>
+          <div class="format-split-bullet">Still a valid .laz file, so it works with all existing LiDAR tools without conversion.</div>
+        </div>
+      </div>
+      <div class="format-split-right">
+        <video src="uploads/copc_animation.webm" poster="uploads/copc_animation-poster.webp" preload="none" loop muted playsinline aria-label="COPC demo"></video>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑭ GeoParquet -->
+  <section class="slide-dark2" data-label="17 GeoParquet">
+    <div class="format-split">
+      <div class="format-split-left">
+        <div>
+          <div class="format-split-logo" style="flex-direction:row; align-items:center; gap:28px;">
+            <div style="background:oklch(96% 0.005 240); border-radius:16px; padding:16px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <img src="uploads/geoparquet_logo.svg" alt="GeoParquet logo" style="height:90px; width:auto; object-fit:contain;">
+            </div>
+            <div>
+              <div style="font-size:52px; font-weight:700; color:var(--white); letter-spacing:-0.02em; line-height:1;">GeoParquet</div>
+              <div style="font-size:24px; font-weight:400; color:oklch(55% 0.02 240); text-transform:uppercase; letter-spacing:0.08em; margin-top:6px;">Columnar Geospatial Format</div>
+            </div>
+          </div>
+        </div>
+        <div class="format-split-bullets">
+          <div class="format-split-bullet">The cloud-native format for vector data analysis — query with SQL, no server needed.</div>
+          <div class="format-split-bullet">Tools like DuckDB and Pandas read it natively, making AI integration natural.</div>
+        </div>
+      </div>
+      <div class="format-split-right">
+        <video src="uploads/geoparquet-demo-resized.webm" poster="uploads/geoparquet-demo-resized-poster.webp" preload="none" loop muted playsinline aria-label="GeoParquet demo"></video>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑮ PMTiles -->
+  <section class="slide-dark" data-label="18 PMTiles">
+    <div class="format-split">
+      <div class="format-split-left">
+        <div>
+          <div class="format-split-logo" style="flex-direction:row; align-items:center; gap:28px;">
+            <img src="uploads/pmtiles_logo.svg" alt="PMTiles logo" style="height:90px; width:auto; object-fit:contain; flex-shrink:0;">
+            <div>
+              <div style="font-size:68px; font-weight:700; color:var(--white); letter-spacing:-0.02em; line-height:1;">PMTiles</div>
+              <div style="font-size:24px; font-weight:400; color:oklch(55% 0.02 240); text-transform:uppercase; letter-spacing:0.1em; margin-top:6px;">Single-File Map Tile Archive</div>
+            </div>
+          </div>
+        </div>
+        <div class="format-split-bullets">
+          <div class="format-split-bullet">Packages map tiles into one file for visualization — no tile server needed.</div>
+          <div class="format-split-bullet">Complements GeoParquet and COG: they handle analysis, PMTiles handles display.</div>
+        </div>
+      </div>
+      <div class="format-split-right">
+        <video src="uploads/pmtiles-overture.webm" poster="uploads/pmtiles-overture-poster.webp" preload="none" loop muted playsinline aria-label="PMTiles demo"></video>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑯ STAC -->
+  <section class="slide-dark" data-label="19 STAC">
+    <div class="format-split">
+      <div class="format-split-left">
+        <div>
+          <div class="format-split-logo" style="flex-direction:row; align-items:center; gap:28px;">
+            <div style="background:oklch(96% 0.005 240); border-radius:16px; padding:16px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <img src="uploads/stac_logo.webp" alt="STAC logo" style="height:90px; width:auto; object-fit:contain;">
+            </div>
+            <div>
+              <div style="font-size:68px; font-weight:700; color:var(--white); letter-spacing:-0.02em; line-height:1;">STAC</div>
+              <div style="font-size:24px; font-weight:400; color:oklch(55% 0.02 240); text-transform:uppercase; letter-spacing:0.08em; margin-top:6px;">SpatioTemporal Asset Catalog</div>
+            </div>
+          </div>
+        </div>
+        <div class="format-split-bullets">
+          <div class="format-split-bullet">Simple JSON format that adds metadata to any cloud-native format.</div>
+          <div class="format-split-bullet">Search collections and items with STAC API or serverless with STAC-GeoParquet.</div>
+        </div>
+      </div>
+      <div class="format-split-right">
+        <video src="uploads/stac_animation.webm" poster="uploads/stac_animation-poster.webp" preload="none" loop muted playsinline aria-label="STAC demo"></video>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑰ AN SDI WITHOUT SERVERS -->
+  <section class="slide-gold" data-label="20 An SDI Without Servers">
+    <div class="pad-center">
+      <div class="section-num" style="color:oklch(40% 0.12 75);">Part III</div>
+      <div style="font-size:88px; font-weight:700; letter-spacing:-0.02em; color:var(--text-dark); margin-bottom:40px;">An SDI Without Servers</div>
+      <div style="display:flex; gap:28px; flex-wrap:wrap;">
+        <div style="background:oklch(35% 0.12 75 / 0.3); border-radius:8px; padding:16px 28px; font-size:var(--t-small); font-weight:600; color:oklch(25% 0.08 75);">GeoParquet</div>
+        <div style="background:oklch(35% 0.12 75 / 0.3); border-radius:8px; padding:16px 28px; font-size:var(--t-small); font-weight:600; color:oklch(25% 0.08 75);">COG</div>
+        <div style="background:oklch(35% 0.12 75 / 0.3); border-radius:8px; padding:16px 28px; font-size:var(--t-small); font-weight:600; color:oklch(25% 0.08 75);">STAC</div>
+        <div style="background:oklch(35% 0.12 75 / 0.3); border-radius:8px; padding:16px 28px; font-size:var(--t-small); font-weight:600; color:oklch(25% 0.08 75);">PMTiles</div>
+        <div style="background:oklch(35% 0.12 75 / 0.3); border-radius:8px; padding:16px 28px; font-size:var(--t-small); font-weight:600; color:oklch(25% 0.08 75);">COPC</div>
+        <div style="background:oklch(35% 0.12 75 / 0.3); border-radius:8px; padding:16px 28px; font-size:var(--t-small); font-weight:600; color:oklch(25% 0.08 75);">Zarr</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑱ PORTOLAN REVEAL -->
+  <section class="slide-dark" data-label="21 Portolan" style="position:relative;">
+    <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.04;" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+      <defs>
+        <pattern id="grid3" width="80" height="80" patternUnits="userSpaceOnUse">
+          <path d="M 80 0 L 0 0 0 80" fill="none" stroke="white" stroke-width="0.5"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#grid3)"/>
+      <g transform="translate(1600,540)" stroke="white" stroke-width="0.8" opacity="0.6">
+        <line x1="0" y1="-480" x2="0" y2="480"/>
+        <line x1="-480" y1="0" x2="480" y2="0"/>
+        <line x1="-339" y1="-339" x2="339" y2="339"/>
+        <line x1="339" y1="-339" x2="-339" y2="339"/>
+        <circle cx="0" cy="0" r="120" fill="none"/>
+        <circle cx="0" cy="0" r="240" fill="none"/>
+        <circle cx="0" cy="0" r="360" fill="none"/>
+        <circle cx="0" cy="0" r="480" fill="none"/>
+      </g>
+    </svg>
+    <div style="flex:1; display:flex; flex-direction:column; padding:var(--pt) var(--px) var(--pb);">
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+        <div class="eyebrow" style="margin-bottom:36px;">Cloud-Native Spatial Data Infrastructure</div>
+        <div class="display" style="font-size:120px; margin-bottom:32px;">Portolan</div>
+        <div class="subtitle" style="max-width:780px;">A new foundation for sharing geospatial data — faster, cheaper, and built for the age of AI.</div>
+      </div>
+      <div style="display:flex; align-items:flex-end; justify-content:flex-end; gap:20px;">
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+          <div style="font-size:20px; color:oklch(60% 0.02 240);">Explore the demo live</div>
+          <div class="muted small" style="font-family:var(--font-mono); text-align:right;">portolan-sdi.github.io/portolan-nl-demo</div>
+        </div>
+        <img src="uploads/qr-demo.svg" alt="QR code to demo" style="width:120px; height:120px;">
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑲ DEMO: Portolan NL Landing Page -->
+  <section data-label="22 Demo" style="background:#000;padding:0;position:relative;">
+    <img src="uploads/portolan-nl-landing.webp" alt="Portolan NL landing page" style="width:100%;height:100%;object-fit:contain;">
+    <div style="position:absolute; bottom:24px; right:24px; display:flex; align-items:flex-end; gap:16px;">
+      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+        <div style="font-family:'DM Sans',system-ui,sans-serif; font-size:16px; color:oklch(60% 0.02 240);">Explore the demo live</div>
+        <div style="font-family:'DM Mono','Courier New',monospace; font-size:14px; color:oklch(75% 0.16 75);">portolan-sdi.github.io/portolan-nl-demo</div>
+      </div>
+      <img src="uploads/qr-demo.svg" alt="QR code to demo" style="width:100px; height:100px;">
+    </div>
+  </section>
+
+  <!-- ⑲b DEMO: Portolan browsing -->
+  <section data-label="22a Portolan Browsing" style="background:#000;padding:0;position:relative;">
+    <video src="uploads/portolan-demo1.webm" poster="uploads/portolan-demo1-poster.webp" preload="none" loop muted playsinline aria-label="Portolan NL browsing demo" style="width:100%;height:100%;object-fit:contain;"></video>
+    <div style="position:absolute; bottom:24px; right:24px;">
+      <img src="uploads/qr-demo.svg" alt="QR code to demo" style="width:100px; height:100px; opacity:0.8;">
+    </div>
+  </section>
+
+  <!-- ⑲c DEMO: GeoParquet browsing -->
+  <section data-label="22b GeoParquet Browsing" style="background:#000;padding:0;">
+    <video src="uploads/geoparquet-portolan.webm" poster="uploads/geoparquet-portolan-poster.webp" preload="none" loop muted playsinline aria-label="GeoParquet data browsing demo" style="width:100%;height:100%;object-fit:contain;"></video>
+  </section>
+
+  <!-- ⑲d DEMO: Buildings PMTiles -->
+  <section data-label="22c Buildings PMTiles" style="background:#000;padding:0;">
+    <video src="uploads/buildings-portolan.webm" poster="uploads/buildings-portolan-poster.webp" preload="none" loop muted playsinline aria-label="Buildings PMTiles demo" style="width:100%;height:100%;object-fit:contain;"></video>
+  </section>
+
+  <!-- ⑲e DEMO: Styles -->
+  <section data-label="22d Styles" style="background:#000;padding:0;">
+    <video src="uploads/styles-portolan.webm" poster="uploads/styles-portolan-poster.webp" preload="none" loop muted playsinline aria-label="Portolan styles demo" style="width:100%;height:100%;object-fit:contain;"></video>
+  </section>
+
+  <!-- ⑲f DEMO: Mapbox Style JSON -->
+  <section data-label="22e Mapbox Style JSON" style="background:#000;padding:0;">
+    <img src="uploads/mapbox-style-json.webp" alt="Mapbox style JSON example" style="width:100%;height:100%;object-fit:contain;">
+  </section>
+
+  <!-- ⑲g DEMO: STAC Assets with Styles -->
+  <section data-label="22f STAC Assets Styles" style="background:#000;padding:0;">
+    <img src="uploads/stac-assets-styles.webp" alt="STAC assets with style artifacts" style="width:100%;height:100%;object-fit:contain;">
+  </section>
+
+  <!-- ⑲h DEMO: COG imagery -->
+  <section data-label="22g COG Imagery" style="background:#000;padding:0;">
+    <video src="uploads/cog-portolan.webm" poster="uploads/cog-portolan-poster.webp" preload="none" loop muted playsinline aria-label="COG aerial imagery demo" style="width:100%;height:100%;object-fit:contain;"></video>
+  </section>
+
+  <!-- ⑲i DEMO: STAC Map -->
+  <section data-label="22h STAC Map" style="background:#000;padding:0;">
+    <video src="uploads/stac-map-portolan.webm" poster="uploads/stac-map-portolan-poster.webp" preload="none" loop muted playsinline aria-label="STAC Map interface demo" style="width:100%;height:100%;object-fit:contain;"></video>
+  </section>
+
+  <!-- ⑲j DEMO: Portolan Source -->
+  <section data-label="22i Portolan Source" style="background:#000;padding:0;">
+    <video src="uploads/portolan-source.webm" poster="uploads/portolan-source-poster.webp" preload="none" loop muted playsinline aria-label="Portolan source view demo" style="width:100%;height:100%;object-fit:contain;"></video>
+  </section>
+
+  <!-- ⑲k DEMO: Portolan Viewers -->
+  <section data-label="22j Portolan Viewers" style="background:#000;padding:0;">
+    <video src="uploads/portolan-viewers.webm" poster="uploads/portolan-viewers-poster.webp" preload="none" loop muted playsinline aria-label="Portolan viewers demo" style="width:100%;height:100%;object-fit:contain;"></video>
+  </section>
+
+  <!-- ⑲l DEMO: Source Cooperative -->
+  <section data-label="22k Source Cooperative" style="background:#000;padding:0;">
+    <video src="uploads/source-coop.webm" poster="uploads/source-coop-poster.webp" preload="none" loop muted playsinline aria-label="Source Cooperative demo" style="width:100%;height:100%;object-fit:contain;"></video>
+  </section>
+
+  <!-- ⑲m DEMO: Source Coop Portolan Readmes -->
+  <section data-label="22l Source Coop Readmes" style="background:#000;padding:0;">
+    <video src="uploads/source-coop-portolan2.webm" poster="uploads/source-coop-portolan2-poster.webp" preload="none" loop muted playsinline aria-label="Source Cooperative Portolan readmes and llms.txt" style="width:100%;height:100%;object-fit:contain;"></video>
+  </section>
+
+  <!-- ⑲n DEMO: AI Prompt -->
+  <section data-label="22m AI Prompt" style="background:#000;padding:0;">
+    <img src="uploads/ai-prompt-buildings.webp" alt="AI prompt to explore buildings data" style="width:100%;height:100%;object-fit:contain;">
+  </section>
+
+  <!-- ⑲o DEMO: AI Skill Reading -->
+  <section data-label="22n AI Skill Reading" style="background:#000;padding:0;">
+    <img src="uploads/reading-portolan-skill.webp" alt="Reading Portolan skill in Claude" style="width:100%;height:100%;object-fit:contain;">
+  </section>
+
+  <!-- ⑲p DEMO: AI Exploring Data -->
+  <section data-label="22o AI Exploring Data" style="background:#000;padding:0;">
+    <img src="uploads/ai-exploring-data.webp" alt="AI exploring BAG Light dataset" style="width:100%;height:100%;object-fit:contain;">
+  </section>
+
+  <!-- ⑲q DEMO: Claude Analysis Results -->
+  <section data-label="22p Claude Analysis" style="background:#000;padding:0;">
+    <video src="uploads/portolan-claude-2.webm" poster="uploads/portolan-claude-2-poster.webp" preload="none" loop muted playsinline aria-label="Claude analyzing BAG buildings data" style="width:100%;height:100%;object-fit:contain;"></video>
+  </section>
+
+  <section data-label="22p2 Claude Compliments" style="background:#000;padding:0;">
+    <img src="uploads/claude_compliments.webp" alt="Claude's compliments on dataset formatting and follow-up suggestions" style="width:100%;height:100%;object-fit:contain;">
+  </section>
+
+  <!-- ⑲r DEMO: National Parks -->
+  <section data-label="22q National Parks" style="background:#000;padding:0;">
+    <img src="uploads/national-parks-portolan.webp" alt="National Parks in Portolan NL" style="width:100%;height:100%;object-fit:contain;">
+  </section>
+
+  <!-- ⑲s DEMO: Claude Spatial Analysis -->
+  <section data-label="22r Claude Spatial Analysis" style="background:#000;padding:0;">
+    <video src="uploads/portolan-claude-3.webm" poster="uploads/portolan-claude-3-poster.webp" preload="none" loop muted playsinline aria-label="Claude performing spatial analysis on buildings and parks" style="width:100%;height:100%;object-fit:contain;"></video>
+  </section>
+
+  <!-- INTERACTIVE: Parks & Buildings dashboard -->
+  <section data-label="22b Parks Buildings" style="background:#f3eee4; padding:0; position:relative;">
+    <iframe src="parks_buildings.html" style="width:100%; height:100%; border:none;" loading="lazy"></iframe>
+    <button class="slide-nav-arrow slide-nav-prev" onclick="document.querySelector('deck-stage')._go(document.querySelector('deck-stage')._index - 1, 'click')">&#8249;</button>
+    <button class="slide-nav-arrow slide-nav-next" onclick="document.querySelector('deck-stage')._go(document.querySelector('deck-stage')._index + 1, 'click')">&#8250;</button>
+  </section>
+
+  <!-- ⑲t DEMO: Claude Monuments Results -->
+  <section data-label="22c Claude Monuments Results" style="background:#000;padding:0;">
+    <video src="uploads/crushed-it-claude.webm" poster="uploads/crushed-it-claude-poster.webp" preload="none" loop muted playsinline aria-label="Claude monuments analysis results" style="width:100%;height:100%;object-fit:contain;"></video>
+  </section>
+
+  <!-- INTERACTIVE: Monuments in National Parks -->
+  <section data-label="22s Monuments" style="background:#f3eee4; padding:0; position:relative;">
+    <iframe src="monuments.html" style="width:100%; height:100%; border:none;" loading="lazy"></iframe>
+    <button class="slide-nav-arrow slide-nav-prev" onclick="document.querySelector('deck-stage')._go(document.querySelector('deck-stage')._index - 1, 'click')">&#8249;</button>
+    <button class="slide-nav-arrow slide-nav-next" onclick="document.querySelector('deck-stage')._go(document.querySelector('deck-stage')._index + 1, 'click')">&#8250;</button>
+  </section>
+
+  <!-- DEMO: Tulip Map App -->
+  <section data-label="22t Tulip Map" style="background:#000;padding:0;">
+    <video src="uploads/tulip-map.webm" poster="uploads/tulip-map-poster.webp" preload="none" loop muted playsinline aria-label="AI-generated tulip map application" style="width:100%;height:100%;object-fit:contain;"></video>
+  </section>
+
+  <!-- DEMO: Tulip Chat Prompt -->
+  <section data-label="22u Tulip Chat" style="background:#000;padding:0;">
+    <img src="uploads/tulip-chat-prompt.webp" alt="Chat prompt asking about tulip fields" style="width:100%;height:100%;object-fit:contain;">
+  </section>
+
+  <!-- DEMO: Crop Chat Analysis -->
+  <section data-label="22v Crop Chat" style="background:#000;padding:0;">
+    <video src="uploads/crop-chat.webm" poster="uploads/crop-chat-poster.webp" preload="none" loop muted playsinline aria-label="AI chat analyzing Dutch crop data" style="width:100%;height:100%;object-fit:contain;"></video>
+  </section>
+
+  <!-- ⑳ PORTOLAN REVISITED (section header) -->
+  <section class="slide-gold" data-label="23 Portolan Revisited">
+    <div class="pad-center">
+      <div class="section-num" style="color:oklch(40% 0.12 75);">Part IV</div>
+      <div style="font-size:88px; font-weight:700; letter-spacing:-0.02em; color:var(--text-dark); margin-bottom:32px;">How Portolan<br>Answers Each Point</div>
+      <div class="subtitle" style="color:oklch(35% 0.04 75); max-width:700px; font-weight:400;">Let's revisit the five requirements — now with Portolan as the answer.</div>
+    </div>
+  </section>
+
+  <!-- ⑳ AI-FIRST 1: Built for AI -->
+  <section class="slide-dark" data-label="24 Built for AI">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="pill-row">
+          <div class="pill active">AI-First ✓</div>
+          <div class="pill">Easy to Implement</div>
+          <div class="pill">Scalable</div>
+          <div class="pill">Low Cost</div>
+          <div class="pill">Sovereign</div>
+        </div>
+        <div class="slide-title">Built for AI</div>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <div class="cols-2" style="gap:80px; align-items:center;">
+          <div class="format-split-bullets" style="gap:32px; margin-top:0; padding-top:0;">
+            <div class="format-split-bullet">Portolan explains to AI in text files how to access the data, no API calls needed.</div>
+            <div class="format-split-bullet">STAC and other metadata gives understanding of what's in the data, for more meaningful analysis and queries.</div>
+          </div>
+          <svg viewBox="0 0 400 300" style="width:100%; max-width:480px;" fill="none">
+            <rect x="20" y="20" width="120" height="50" rx="8" fill="oklch(75% 0.16 75 / 0.2)" stroke="oklch(75% 0.16 75)" stroke-width="1.5"/>
+            <text x="80" y="50" text-anchor="middle" fill="oklch(75% 0.16 75)" font-size="16" font-weight="600" font-family="DM Sans">AI Agent</text>
+            <rect x="20" y="130" width="120" height="50" rx="8" fill="oklch(100% 0 0 / 0.06)" stroke="oklch(60% 0.02 240)" stroke-width="1"/>
+            <text x="80" y="160" text-anchor="middle" fill="oklch(85% 0.01 240)" font-size="14" font-family="DM Mono">STAC JSON</text>
+            <rect x="20" y="220" width="120" height="50" rx="8" fill="oklch(100% 0 0 / 0.06)" stroke="oklch(60% 0.02 240)" stroke-width="1"/>
+            <text x="80" y="250" text-anchor="middle" fill="oklch(85% 0.01 240)" font-size="14" font-family="DM Mono">GeoParquet</text>
+            <path d="M80 70 L80 130" stroke="oklch(75% 0.16 75 / 0.5)" stroke-width="1.5" marker-end="url(#arrowG)"/>
+            <path d="M80 180 L80 220" stroke="oklch(75% 0.16 75 / 0.5)" stroke-width="1.5" marker-end="url(#arrowG)"/>
+            <rect x="220" y="20" width="160" height="50" rx="8" fill="oklch(100% 0 0 / 0.06)" stroke="oklch(60% 0.02 240)" stroke-width="1"/>
+            <text x="300" y="50" text-anchor="middle" fill="oklch(85% 0.01 240)" font-size="14" font-family="DM Mono">INSPIRE schemas</text>
+            <path d="M300 70 L300 120 L140 155" stroke="oklch(75% 0.16 75 / 0.3)" stroke-width="1" stroke-dasharray="6 4"/>
+            <text x="260" y="108" fill="oklch(60% 0.02 240)" font-size="11" font-family="DM Sans">extracted as metadata</text>
+            <rect x="220" y="180" width="160" height="90" rx="8" fill="oklch(75% 0.16 75 / 0.1)" stroke="oklch(75% 0.16 75 / 0.3)" stroke-width="1"/>
+            <text x="300" y="215" text-anchor="middle" fill="oklch(75% 0.16 75)" font-size="13" font-weight="500" font-family="DM Sans">Foundation Models</text>
+            <text x="300" y="240" text-anchor="middle" fill="oklch(60% 0.02 240)" font-size="12" font-family="DM Sans">World models · Agents</text>
+            <path d="M140 245 L220 225" stroke="oklch(75% 0.16 75 / 0.3)" stroke-width="1" stroke-dasharray="6 4"/>
+            <defs><marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="oklch(75% 0.16 75 / 0.5)"/></marker></defs>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ㉑ AI-FIRST 2: AI Queries Your Data -->
+  <section class="slide-dark2" data-label="25 AI Queries Your Data">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="pill-row">
+          <div class="pill active">AI-First ✓</div>
+          <div class="pill">Easy to Implement</div>
+          <div class="pill">Scalable</div>
+          <div class="pill">Low Cost</div>
+          <div class="pill">Sovereign</div>
+        </div>
+        <div class="slide-title">AI Queries Your Data</div>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <div class="cols-2" style="gap:80px; align-items:center;">
+          <div class="format-split-bullets" style="gap:32px; margin-top:0; padding-top:0;">
+            <div class="format-split-bullet">AI translates natural language into GeoParquet queries — data answers questions directly.</div>
+            <div class="format-split-bullet">Natural foundation for world models and agentic workflows.</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div style="background:oklch(75% 0.16 75 / 0.12); border:1px solid oklch(75% 0.16 75 / 0.3); border-radius:10px; padding:20px 28px; font-size:24px; font-weight:500; color:var(--gold); font-style:italic;">"Where are the tallest buildings?"</div>
+            <div style="background:oklch(100% 0 0 / 0.06); border-radius:10px; padding:28px; font-family:var(--font-mono); font-size:17px; color:var(--gold); line-height:2;">
+              <span style="color:oklch(55% 0.02 240);">-- AI-generated query</span><br>
+              SELECT inspireId, name,<br>
+              &nbsp;&nbsp;heightAboveGround_value,<br>
+              &nbsp;&nbsp;ST_AsText(ST_Centroid(geometry))<br>
+              FROM 's3://sdi/buildings.parquet'<br>
+              WHERE heightAboveGround_value IS NOT NULL<br>
+              ORDER BY heightAboveGround_value DESC
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ㉒ EASY TO IMPLEMENT 1: Ecosystem for Free -->
+  <section class="slide-dark" data-label="27 Ecosystem for Free">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="pill-row">
+          <div class="pill">AI-First ✓</div>
+          <div class="pill active">Easy to Implement ✓</div>
+          <div class="pill">Scalable</div>
+          <div class="pill">Low Cost</div>
+          <div class="pill">Sovereign</div>
+        </div>
+        <div class="slide-title">Ecosystem for Free</div>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <div class="cols-2" style="gap:80px; align-items:center;">
+          <div class="format-split-bullets" style="gap:32px; margin-top:0; padding-top:0;">
+            <div class="format-split-bullet">Standard formats mean a data browser and map come automatically.</div>
+            <div class="format-split-bullet">Growing ecosystem will rapidly deliver more interactive tools.</div>
+          </div>
+          <svg viewBox="0 0 420 280" style="width:100%; max-width:500px;" fill="none">
+            <rect x="30" y="10" width="360" height="44" rx="8" fill="oklch(100% 0 0 / 0.06)" stroke="oklch(60% 0.02 240)" stroke-width="1"/>
+            <text x="210" y="37" text-anchor="middle" fill="oklch(85% 0.01 240)" font-size="14" font-family="DM Mono">GeoParquet · COG · STAC · COPC · PMTiles</text>
+            <path d="M210 54 L210 90" stroke="oklch(75% 0.16 75 / 0.5)" stroke-width="1.5" marker-end="url(#arrowG)"/>
+            <rect x="80" y="90" width="260" height="44" rx="8" fill="oklch(75% 0.16 75 / 0.15)" stroke="oklch(75% 0.16 75 / 0.5)" stroke-width="1.5"/>
+            <text x="210" y="117" text-anchor="middle" fill="oklch(75% 0.16 75)" font-size="15" font-weight="600" font-family="DM Sans">Portolan</text>
+            <path d="M120 134 L60 170" stroke="oklch(75% 0.16 75 / 0.3)" stroke-width="1"/>
+            <path d="M170 134 L150 170" stroke="oklch(75% 0.16 75 / 0.3)" stroke-width="1"/>
+            <path d="M250 134 L270 170" stroke="oklch(75% 0.16 75 / 0.3)" stroke-width="1"/>
+            <path d="M300 134 L360 170" stroke="oklch(75% 0.16 75 / 0.3)" stroke-width="1"/>
+            <rect x="5" y="170" width="110" height="36" rx="6" fill="oklch(100% 0 0 / 0.04)" stroke="oklch(60% 0.02 240 / 0.5)" stroke-width="1"/>
+            <text x="60" y="193" text-anchor="middle" fill="oklch(70% 0.015 240)" font-size="13" font-family="DM Sans">Data Viewer</text>
+            <rect x="125" y="170" width="50" height="36" rx="6" fill="oklch(100% 0 0 / 0.04)" stroke="oklch(60% 0.02 240 / 0.5)" stroke-width="1"/>
+            <text x="150" y="193" text-anchor="middle" fill="oklch(70% 0.015 240)" font-size="13" font-family="DM Sans">Map</text>
+            <rect x="185" y="170" width="110" height="36" rx="6" fill="oklch(100% 0 0 / 0.04)" stroke="oklch(60% 0.02 240 / 0.5)" stroke-width="1"/>
+            <text x="240" y="193" text-anchor="middle" fill="oklch(70% 0.015 240)" font-size="13" font-family="DM Sans">AI Chat</text>
+            <rect x="305" y="170" width="110" height="36" rx="6" fill="oklch(100% 0 0 / 0.04)" stroke="oklch(60% 0.02 240 / 0.5)" stroke-width="1"/>
+            <text x="360" y="193" text-anchor="middle" fill="oklch(70% 0.015 240)" font-size="13" font-family="DM Sans">QGIS Plugin</text>
+            <text x="210" y="250" text-anchor="middle" fill="oklch(50% 0.02 240)" font-size="12" font-style="italic" font-family="DM Sans">All generated automatically from standard formats</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ㉓ EASY TO IMPLEMENT 2: Point, Convert, Push -->
+  <section class="slide-dark2" data-label="26 Point, Convert, Push">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="pill-row">
+          <div class="pill">AI-First ✓</div>
+          <div class="pill active">Easy to Implement ✓</div>
+          <div class="pill">Scalable</div>
+          <div class="pill">Low Cost</div>
+          <div class="pill">Sovereign</div>
+        </div>
+        <div class="slide-title">Point, Convert, Push</div>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <div class="cols-2" style="gap:80px; align-items:center;">
+          <div style="background:oklch(75% 0.16 75 / 0.12); border:1px solid oklch(75% 0.16 75 / 0.3); border-radius:10px; padding:24px 28px; font-size:22px; font-weight:400; color:var(--gold); font-style:italic; line-height:1.7;">"Claude, can you use the portolan skill to go through these data folders, extract relevant metadata, and publish a Portolan node to Source Cooperative?"</div>
+          <div class="format-split-bullets" style="gap:32px; margin-top:0; padding-top:0;">
+            <div class="format-split-bullet">Portolan tools convert shapefiles, WFS, GeoPackage, BigQuery, or ArcGIS Feature Services into cloud-native formats.</div>
+            <div class="format-split-bullet">AI tools excel at CLI + text files — non-experts can set up nodes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ㉔ SCALABILITY (Portolan) -->
+  <section class="slide-dark" data-label="28 Scalability">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="pill-row">
+          <div class="pill">AI-First ✓</div>
+          <div class="pill">Easy to Implement ✓</div>
+          <div class="pill active">Scalable ✓</div>
+          <div class="pill">Low Cost</div>
+          <div class="pill">Sovereign</div>
+        </div>
+        <div class="slide-title">Scalability</div>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <div class="cols-2" style="gap:80px; align-items:center;">
+          <div class="format-split-bullets" style="gap:32px; margin-top:0; padding-top:0;">
+            <div class="format-split-bullet">No servers — scalability handled entirely by cloud storage.</div>
+            <div class="format-split-bullet">Object storage is the most robust, proven layer any cloud offers.</div>
+          </div>
+          <div class="stat-block" style="align-items:flex-start;">
+            <div class="stat-num" style="font-size:100px;">0</div>
+            <div class="stat-label">servers to maintain</div>
+            <div style="height:32px;"></div>
+            <div class="stat-num" style="font-size:100px;">∞</div>
+            <div class="stat-label">concurrent requests</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ㉓ COST (Portolan) -->
+  <section class="slide-dark2" data-label="29 Cost">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="pill-row">
+          <div class="pill">AI-First ✓</div>
+          <div class="pill">Easy to Implement ✓</div>
+          <div class="pill">Scalable ✓</div>
+          <div class="pill active">Low Cost ✓</div>
+          <div class="pill">Sovereign</div>
+        </div>
+        <div class="slide-title">The Cost Picture</div>
+      </div>
+      <div class="slide-body" style="justify-content:center; position:relative;" id="cost-calc">
+      <p style="font-size:24px; color:oklch(75% 0.01 240); line-height:1.5; margin:0 0 20px 0; max-width:1100px;">
+        Only two costs: <strong style="color:var(--offwhite);">storage</strong> and <strong style="color:var(--offwhite);">egress</strong>. Click <em>Edit</em> to adjust estimates and compare providers.
+      </p>
+      <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px;">
+        <div id="cc-provider-bar" style="display:none; gap:8px; align-items:center;">
+          <span style="font-size:20px; color:oklch(60% 0.02 240); margin-right:8px;">Provider:</span>
+          <button onclick="ccSetProvider('leaseweb')" class="cc-prov-btn" data-p="leaseweb" style="background:oklch(75% 0.16 75); color:oklch(14% 0.02 240); border:none; border-radius:6px; padding:8px 20px; font-size:20px; font-weight:600; font-family:var(--font-sans); cursor:pointer;">Leaseweb</button>
+          <button onclick="ccSetProvider('hetzner')" class="cc-prov-btn" data-p="hetzner" style="background:oklch(100% 0 0 / 0.08); color:var(--offwhite); border:1px solid oklch(100% 0 0 / 0.15); border-radius:6px; padding:8px 20px; font-size:20px; font-weight:600; font-family:var(--font-sans); cursor:pointer;">Hetzner</button>
+          <button onclick="ccSetProvider('aws')" class="cc-prov-btn" data-p="aws" style="background:oklch(100% 0 0 / 0.08); color:var(--offwhite); border:1px solid oklch(100% 0 0 / 0.15); border-radius:6px; padding:8px 20px; font-size:20px; font-weight:600; font-family:var(--font-sans); cursor:pointer;">AWS S3</button>
+        </div>
+        <div style="flex:1;"></div>
+        <button id="cc-edit-btn" onclick="ccToggleEdit()" style="background:none; border:1px solid oklch(75% 0.16 75 / 0.5); color:oklch(75% 0.16 75); border-radius:6px; padding:6px 18px; font-size:18px; font-weight:500; font-family:var(--font-sans); cursor:pointer; letter-spacing:0.05em;">Edit</button>
+      </div>
+      <table style="color:var(--offwhite);" id="cc-table">
+        <thead>
+          <tr>
+            <th style="color:oklch(60% 0.02 240); border-bottom-color:oklch(100% 0 0 / 0.12);">Scenario</th>
+            <th style="color:oklch(60% 0.02 240); border-bottom-color:oklch(100% 0 0 / 0.12);">Data</th>
+            <th style="color:oklch(60% 0.02 240); border-bottom-color:oklch(100% 0 0 / 0.12);">Size</th>
+            <th style="color:oklch(60% 0.02 240); border-bottom-color:oklch(100% 0 0 / 0.12);">Storage / mo.</th>
+            <th style="color:oklch(60% 0.02 240); border-bottom-color:oklch(100% 0 0 / 0.12);">Transfer / mo.</th>
+            <th style="color:oklch(60% 0.02 240); border-bottom-color:oklch(100% 0 0 / 0.12);">Egress / mo.</th>
+            <th style="color:oklch(60% 0.02 240); border-bottom-color:oklch(100% 0 0 / 0.12);">Total / mo.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-row="0">
+            <td style="color:var(--offwhite); border-bottom-color:oklch(100% 0 0 / 0.07);"><strong>Municipality</strong></td>
+            <td style="color:oklch(75% 0.01 240); border-bottom-color:oklch(100% 0 0 / 0.07);">Vector (BAG, BGT, zoning)</td>
+            <td class="cc-size" style="color:oklch(75% 0.01 240); border-bottom-color:oklch(100% 0 0 / 0.07);"></td>
+            <td class="num cc-stor" style="color:oklch(75% 0.01 240); border-bottom-color:oklch(100% 0 0 / 0.07);"></td>
+            <td class="cc-xfer" style="color:oklch(75% 0.01 240); border-bottom-color:oklch(100% 0 0 / 0.07);"></td>
+            <td class="num cc-egr" style="color:oklch(75% 0.01 240); border-bottom-color:oklch(100% 0 0 / 0.07);"></td>
+            <td class="num cc-tot" style="color:var(--gold); font-weight:600; border-bottom-color:oklch(100% 0 0 / 0.07);"></td>
+          </tr>
+          <tr data-row="1">
+            <td style="color:var(--offwhite); border-bottom-color:oklch(100% 0 0 / 0.07);"><strong>Province</strong></td>
+            <td style="color:oklch(75% 0.01 240); border-bottom-color:oklch(100% 0 0 / 0.07);">Vector + orthophoto</td>
+            <td class="cc-size" style="color:oklch(75% 0.01 240); border-bottom-color:oklch(100% 0 0 / 0.07);"></td>
+            <td class="num cc-stor" style="color:oklch(75% 0.01 240); border-bottom-color:oklch(100% 0 0 / 0.07);"></td>
+            <td class="cc-xfer" style="color:oklch(75% 0.01 240); border-bottom-color:oklch(100% 0 0 / 0.07);"></td>
+            <td class="num cc-egr" style="color:oklch(75% 0.01 240); border-bottom-color:oklch(100% 0 0 / 0.07);"></td>
+            <td class="num cc-tot" style="color:var(--gold); font-weight:600; border-bottom-color:oklch(100% 0 0 / 0.07);"></td>
+          </tr>
+          <tr data-row="2">
+            <td style="color:var(--offwhite); border-bottom-color:oklch(100% 0 0 / 0.07);"><strong>National (PDOK-scale)</strong></td>
+            <td style="color:oklch(75% 0.01 240); border-bottom-color:oklch(100% 0 0 / 0.07);">All registrations + AHN + luchtfoto</td>
+            <td class="cc-size" style="color:oklch(75% 0.01 240); border-bottom-color:oklch(100% 0 0 / 0.07);"></td>
+            <td class="num cc-stor" style="color:oklch(75% 0.01 240); border-bottom-color:oklch(100% 0 0 / 0.07);"></td>
+            <td class="cc-xfer" style="color:oklch(75% 0.01 240); border-bottom-color:oklch(100% 0 0 / 0.07);"></td>
+            <td class="num cc-egr" style="color:oklch(75% 0.01 240); border-bottom-color:oklch(100% 0 0 / 0.07);"></td>
+            <td class="num cc-tot" style="color:var(--gold); font-weight:600; border-bottom-color:oklch(100% 0 0 / 0.07);"></td>
+          </tr>
+          <tr style="background:oklch(75% 0.16 75 / 0.08);">
+            <td colspan="6" style="font-size:var(--t-label); color:oklch(65% 0.02 240); border-bottom:none;">Source Cooperative: free hosting for open government data</td>
+            <td class="num" style="color:var(--gold); font-weight:600; border-bottom:none;">€ 0</td>
+          </tr>
+        </tbody>
+      </table>
+        <div id="cc-footnote" style="margin-top:24px; font-size:18px; color:oklch(45% 0.02 240); line-height:1.8;"></div>
+      </div>
+      <script>
+      (function(){
+        const providers = {
+          leaseweb: {
+            label: 'Leaseweb Object Storage (Dutch, S3-compatible)',
+            storPerGB: 0.017, egrPerGB: 0.0022,
+            baseMonthly: 0, inclStorGB: 0, inclEgrGB: 0,
+            detail: '€0.017/GB/mo storage · €0.0022/GB egress'
+          },
+          hetzner: {
+            label: 'Hetzner Object Storage (German/EU, S3-compatible)',
+            storPerGB: 0.005, egrPerGB: 0.001,
+            baseMonthly: 6.49, inclStorGB: 1024, inclEgrGB: 1024,
+            detail: '€6.49/mo base (1 TB storage + 1 TB egress incl.) · €0.005/GB overage storage · €0.001/GB overage egress'
+          },
+          aws: {
+            label: 'AWS S3 eu-west-1',
+            storPerGB: 0.023,
+            tieredEgress: [
+              { upToGB: 100, perGB: 0 },
+              { upToGB: 10240, perGB: 0.09 },
+              { upToGB: 51200, perGB: 0.085 },
+              { upToGB: 153600, perGB: 0.07 },
+              { upToGB: Infinity, perGB: 0.05 }
+            ],
+            baseMonthly: 0, inclStorGB: 0, inclEgrGB: 0,
+            detail: '$0.023/GB/mo storage · egress tiered: $0.09 → $0.05/GB — prices in USD'
+          }
+        };
+
+        const rows = [
+          { sizeGB: 2, xferGB: 200 },
+          { sizeGB: 3072, xferGB: 10240 },
+          { sizeGB: 81920, xferGB: 2097152 }
+        ];
+
+        let curProvider = 'leaseweb';
+        let editing = false;
+
+        function toGB(val, unit) {
+          if (unit === 'PB') return val * 1024 * 1024;
+          if (unit === 'TB') return val * 1024;
+          return val;
+        }
+
+        function fmtSize(gb) {
+          if (gb >= 1024 * 1024) return (gb / (1024*1024)).toFixed(gb % (1024*1024) === 0 ? 0 : 1) + ' PB';
+          if (gb >= 1024) return (gb / 1024).toFixed(gb % 1024 === 0 ? 0 : 1) + ' TB';
+          return gb + ' GB';
+        }
+
+        function fmtEur(v) {
+          if (v >= 1000) return '€ ' + v.toLocaleString('en', {maximumFractionDigits:0});
+          if (v >= 10) return '€ ' + v.toFixed(0);
+          if (v >= 1) return '€ ' + v.toFixed(1);
+          return '€ ' + v.toFixed(2);
+        }
+
+        function calc(sizeGB, xferGB, p) {
+          let stor = p.baseMonthly + Math.max(0, sizeGB - p.inclStorGB) * p.storPerGB;
+          let billableGB = Math.max(0, xferGB - (p.inclEgrGB || 0));
+          let egr = 0;
+          if (p.tieredEgress) {
+            let remaining = billableGB;
+            let prev = 0;
+            for (const tier of p.tieredEgress) {
+              const tierGB = tier.upToGB - prev;
+              const used = Math.min(remaining, tierGB);
+              egr += used * tier.perGB;
+              remaining -= used;
+              prev = tier.upToGB;
+              if (remaining <= 0) break;
+            }
+          } else {
+            egr = billableGB * p.egrPerGB;
+          }
+          return { stor, egr, total: stor + egr };
+        }
+
+        function render() {
+          const p = providers[curProvider];
+          document.querySelectorAll('.cc-prov-btn').forEach(b => {
+            const active = b.dataset.p === curProvider;
+            b.style.background = active ? 'oklch(75% 0.16 75)' : 'oklch(100% 0 0 / 0.08)';
+            b.style.color = active ? 'oklch(14% 0.02 240)' : 'oklch(93% 0.008 240)';
+            b.style.border = active ? 'none' : '1px solid oklch(100% 0 0 / 0.15)';
+          });
+          const trs = document.querySelectorAll('#cc-table tr[data-row]');
+          trs.forEach((tr, i) => {
+            const r = rows[i];
+            const c = calc(r.sizeGB, r.xferGB, p);
+            const sizeCell = tr.querySelector('.cc-size');
+            const xferCell = tr.querySelector('.cc-xfer');
+            if (editing) {
+              if (!sizeCell.querySelector('input')) {
+                sizeCell.innerHTML = '<input class="cc-inp" data-row="'+i+'" data-field="size" value="'+fmtSize(r.sizeGB)+'">';
+                xferCell.innerHTML = '<input class="cc-inp" data-row="'+i+'" data-field="xfer" value="'+fmtSize(r.xferGB)+'">';
+                sizeCell.querySelectorAll('.cc-inp').forEach(attachInput);
+                xferCell.querySelectorAll('.cc-inp').forEach(attachInput);
+              }
+            } else {
+              sizeCell.textContent = '~' + fmtSize(r.sizeGB);
+              xferCell.textContent = '~' + fmtSize(r.xferGB);
+            }
+            tr.querySelector('.cc-stor').textContent = fmtEur(c.stor);
+            tr.querySelector('.cc-egr').textContent = fmtEur(c.egr);
+            tr.querySelector('.cc-tot').textContent = '~' + fmtEur(c.total);
+          });
+          const cur = curProvider === 'aws' ? '$' : '€';
+          document.getElementById('cc-footnote').innerHTML =
+            'Priced on ' + p.label + ': ' + p.detail + '<br>' +
+            'National estimate: AHN ~25 TB, luchtfoto ~40 TB, vector registrations ~500 GB, overhead ~15 TB · No server compute, licensing, or staffing costs';
+        }
+
+        function parseSize(str) {
+          str = str.replace(/[~,]/g, '').trim();
+          const m = str.match(/^([\d.]+)\s*(PB|TB|GB)?$/i);
+          if (!m) return null;
+          const val = parseFloat(m[1]);
+          const unit = (m[2] || 'GB').toUpperCase();
+          return toGB(val, unit);
+        }
+
+        function attachInput(inp) {
+          inp.addEventListener('change', function() {
+            const ri = parseInt(this.dataset.row);
+            const gb = parseSize(this.value);
+            if (gb === null || gb <= 0) { this.value = fmtSize(rows[ri][this.dataset.field === 'size' ? 'sizeGB' : 'xferGB']); return; }
+            if (this.dataset.field === 'size') rows[ri].sizeGB = gb;
+            else rows[ri].xferGB = gb;
+            this.value = fmtSize(gb);
+            render();
+          });
+        }
+
+        window.ccSetProvider = function(k) { curProvider = k; render(); };
+        window.ccToggleEdit = function() {
+          editing = !editing;
+          const bar = document.getElementById('cc-provider-bar');
+          const btn = document.getElementById('cc-edit-btn');
+          bar.style.display = editing ? 'flex' : 'none';
+          btn.textContent = editing ? 'Done' : 'Edit';
+          btn.style.background = editing ? 'oklch(75% 0.16 75)' : 'none';
+          btn.style.color = editing ? 'oklch(14% 0.02 240)' : 'oklch(75% 0.16 75)';
+          render();
+        };
+
+        const style = document.createElement('style');
+        style.textContent = '.cc-inp{background:none;border:none;border-bottom:2px solid oklch(75% 0.16 75 / 0.5);color:oklch(75% 0.01 240);font-family:var(--font-mono);font-size:var(--t-small);font-weight:500;width:120px;padding:2px 0;text-align:right;outline:none;}.cc-inp:focus{border-bottom-color:oklch(75% 0.16 75);}';
+        document.head.appendChild(style);
+
+        render();
+      })();
+      </script>
+    </div>
+  </section>
+
+  <!-- ㉖ SOVEREIGNTY (Portolan) -->
+  <section class="slide-dark2" data-label="30 Sovereignty">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="pill-row">
+          <div class="pill">AI-First ✓</div>
+          <div class="pill">Easy to Implement ✓</div>
+          <div class="pill">Scalable ✓</div>
+          <div class="pill">Low Cost ✓</div>
+          <div class="pill active">Sovereign ✓</div>
+        </div>
+        <div class="slide-title">Sovereignty</div>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <div class="cols-2" style="gap:80px; align-items:center;">
+          <div style="display:flex; flex-direction:column; gap:40px;">
+            <div style="display:flex; align-items:center; gap:24px;">
+              <img src="uploads/eu-flag.svg" alt="EU flag" style="width:80px; height:54px; border-radius:4px;">
+              <div style="font-size:28px; font-weight:300; color:oklch(70% 0.015 240); line-height:1.4;">European digital<br>sovereignty</div>
+            </div>
+            <div class="format-split-bullets" style="gap:32px; margin-top:0; padding-top:0;">
+              <div class="format-split-bullet">No foreign vendor in the stack — 100% open source, no servers.</div>
+              <div class="format-split-bullet">Cloud-native just needs S3-compatible storage — many European providers qualify.</div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:28px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; width:100%; max-width:600px;">
+              <div style="background:oklch(100% 0 0 / 0.08); border:1px solid oklch(100% 0 0 / 0.12); border-radius:12px; padding:20px 24px; display:flex; align-items:center; gap:14px;">
+                <img src="uploads/logo-leaseweb.svg" alt="Leaseweb" style="width:32px; height:32px; filter:brightness(0) invert(1);">
+                <div><div style="font-size:24px; font-weight:600; color:var(--white);">Leaseweb</div><div style="font-size:14px; color:oklch(55% 0.02 240);">Netherlands 🇳🇱</div></div>
+              </div>
+              <div style="background:oklch(100% 0 0 / 0.08); border:1px solid oklch(100% 0 0 / 0.12); border-radius:12px; padding:20px 24px; display:flex; align-items:center; gap:14px;">
+                <img src="uploads/logo-hetzner.svg" alt="Hetzner" style="width:32px; height:32px; filter:invert(1);">
+                <div><div style="font-size:24px; font-weight:600; color:var(--white);">Hetzner</div><div style="font-size:14px; color:oklch(55% 0.02 240);">Germany 🇩🇪</div></div>
+              </div>
+              <div style="background:oklch(100% 0 0 / 0.08); border:1px solid oklch(100% 0 0 / 0.12); border-radius:12px; padding:20px 24px; display:flex; align-items:center; gap:14px;">
+                <img src="uploads/logo-scaleway.svg" alt="Scaleway" style="width:32px; height:32px; filter:invert(1);">
+                <div><div style="font-size:24px; font-weight:600; color:var(--white);">Scaleway</div><div style="font-size:14px; color:oklch(55% 0.02 240);">France 🇫🇷</div></div>
+              </div>
+              <div style="background:oklch(100% 0 0 / 0.08); border:1px solid oklch(100% 0 0 / 0.12); border-radius:12px; padding:20px 24px; display:flex; align-items:center; gap:14px;">
+                <img src="uploads/logo-ovhcloud.svg" alt="OVHcloud" style="width:32px; height:32px; filter:invert(1);">
+                <div><div style="font-size:24px; font-weight:600; color:var(--white);">OVHcloud</div><div style="font-size:14px; color:oklch(55% 0.02 240);">France 🇫🇷</div></div>
+              </div>
+              <div style="background:oklch(100% 0 0 / 0.08); border:1px solid oklch(100% 0 0 / 0.12); border-radius:12px; padding:20px 24px; display:flex; align-items:center; gap:14px;">
+                <img src="uploads/logo-ionos.svg" alt="IONOS" style="width:32px; height:32px; filter:invert(1);">
+                <div><div style="font-size:24px; font-weight:600; color:var(--white);">IONOS</div><div style="font-size:14px; color:oklch(55% 0.02 240);">Germany 🇩🇪</div></div>
+              </div>
+              <div style="background:oklch(100% 0 0 / 0.08); border:1px solid oklch(100% 0 0 / 0.12); border-radius:12px; padding:20px 24px; display:flex; align-items:center; gap:14px;">
+                <img src="uploads/logo-minio.svg" alt="MinIO" style="width:32px; height:32px; filter:invert(1);">
+                <div><div style="font-size:24px; font-weight:600; color:var(--white);">MinIO</div><div style="font-size:14px; color:oklch(55% 0.02 240);">Self-hosted</div></div>
+              </div>
+            </div>
+            <div style="font-size:20px; color:oklch(50% 0.02 240); font-style:italic;">Any S3-compatible storage</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ㉕ CONCLUSION / CTA -->
+  <section class="slide-dark" data-label="29 The Path Forward" style="position:relative;">
+    <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.05;" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+      <defs>
+        <pattern id="grid3" width="80" height="80" patternUnits="userSpaceOnUse">
+          <path d="M 80 0 L 0 0 0 80" fill="none" stroke="white" stroke-width="0.5"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#grid3)"/>
+      <g transform="translate(1600,540)" stroke="white" stroke-width="0.6" opacity="0.8">
+        <circle cx="0" cy="0" r="120" fill="none"/>
+        <circle cx="0" cy="0" r="240" fill="none"/>
+        <circle cx="0" cy="0" r="360" fill="none"/>
+        <circle cx="0" cy="0" r="480" fill="none"/>
+        <line x1="0" y1="-520" x2="0" y2="520"/>
+        <line x1="-520" y1="0" x2="520" y2="0"/>
+        <line x1="-368" y1="-368" x2="368" y2="368"/>
+        <line x1="368" y1="-368" x2="-368" y2="368"/>
+      </g>
+    </svg>
+
+    <div class="pad" style="justify-content:space-between;">
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+        <div class="eyebrow">Call to action</div>
+        <div class="display" style="font-size:90px; max-width:1000px; margin-bottom:48px;">The Path Forward</div>
+        <div class="cols-2" style="gap:48px; max-width:1400px;">
+          <div>
+            <div class="subtitle" style="font-size:38px; margin-bottom:24px; font-weight:400; color:oklch(85% 0.01 240);">Be the first.</div>
+            <div class="body" style="color:oklch(70% 0.015 240); line-height:1.65; font-size:30px;">
+              A Dutch government Portolan implementation would be the world's first real proof point — and a model for SDIs across Europe, and the world. You have the open data culture, the technical capacity, and the geospatial ambition to lead.
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <div class="card">
+              <div class="card-label">Join the community</div>
+              <div class="card-body">Portolan is open-source, community-governed. Contribute to the spec and tooling. Shape the direction.</div>
+            </div>
+            <div class="card">
+              <div class="card-label">Run a pilot</div>
+              <div class="card-body">Pick a dataset, set up a Portolan node, share it. The barrier is low — we'd be glad to help.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; gap:80px; align-items:flex-end;">
+        <div class="cta-url">portolan-sdi.org</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING: Index page with overlay -->
+  <section data-label="30 Explore" style="background:#000; padding:0; position:relative;">
+    <iframe src="index.html" style="width:100%; height:100%; border:none;"></iframe>
+    <div style="position:absolute; bottom:60px; left:50%; transform:translateX(-50%); background:oklch(16% 0.04 240 / 0.92); border:1px solid oklch(75% 0.16 75 / 0.4); border-radius:16px; padding:28px 48px; text-align:center; backdrop-filter:blur(12px); display:flex; align-items:center; gap:36px;">
+      <div>
+        <div style="font-family:'DM Sans',system-ui,sans-serif; font-size:36px; font-weight:600; color:oklch(93% 0.008 240); letter-spacing:-0.01em;">Get the talk and explore the demos at</div>
+        <div style="font-family:'DM Mono','Courier New',monospace; font-size:32px; font-weight:500; color:oklch(75% 0.16 75); margin-top:12px;">9eo.org/talks/open-geodag-2026</div>
+      </div>
+      <img src="uploads/qr-presentation.svg" alt="QR code" style="width:140px; height:140px;">
+    </div>
+    <button class="slide-nav-arrow slide-nav-prev" onclick="document.querySelector('deck-stage')._go(document.querySelector('deck-stage')._index - 1, 'click')">&#8249;</button>
+  </section>
+
+</deck-stage>
+
+<script>
+  const _bc = new BroadcastChannel('portolan-deck');
+  const _notesTag = document.getElementById('speaker-notes');
+  const _deckNotes = _notesTag ? JSON.parse(_notesTag.textContent || '[]') : [];
+  const _deck = document.querySelector('deck-stage');
+
+  document.addEventListener('slidechange', (e) => {
+    _bc.postMessage({ type: 'slidechange', index: e.detail.index, total: e.detail.total, notes: _deckNotes });
+  });
+
+  // Re-broadcast current state so a presenter opened after the deck still syncs
+  _deck.addEventListener('slidechange', () => {}, { once: true });
+  requestAnimationFrame(() => {
+    _bc.postMessage({ type: 'slidechange', index: _deck.index, total: _deck.length, notes: _deckNotes });
+  });
+
+  _bc.addEventListener('message', (e) => {
+    if (e.data.type === 'nav') {
+      if (e.data.dir === 'next') _deck.next();
+      else if (e.data.dir === 'prev') _deck.prev();
+    }
+  });
+</script>
+
+
+<script>
+  // The deck keeps every slide mounted, so videos must be driven by hand.
+  // preload="none" means nothing downloads until a slide is actually shown.
+  (function () {
+    var stage = document.querySelector('deck-stage');
+    if (!stage) return;
+    function vids(el) { return el ? el.querySelectorAll('video') : []; }
+    stage.addEventListener('slidechange', function (e) {
+      Array.prototype.forEach.call(vids(e.detail.previousSlide), function (v) {
+        v.pause();
+      });
+      Array.prototype.forEach.call(vids(e.detail.slide), function (v) {
+        // A paused video keeps its buffer, so returning to a slide resumes.
+        var play = v.play();
+        if (play && play.catch) play.catch(function () {});
+      });
+    });
+  })();
+</script>
+</body>
+</html>
