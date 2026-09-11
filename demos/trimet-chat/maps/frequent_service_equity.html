@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Frequent transit access by income — Portland / TriMet</title>
+<style>
+  :root{--ink:#1c2430;--muted:#6b7480;--line:#e6e9ee;--bar:#2b6cb0;--bar2:#7aa7d6;--ref:#c0392b}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:#fff;padding:26px 30px}
+  h1{font-size:19px;margin:0 0 3px}
+  .sub{color:var(--muted);font-size:13px;max-width:720px;line-height:1.5;margin:0 0 18px}
+  .chart{max-width:760px}
+  .bars{display:flex;align-items:flex-end;gap:20px;height:300px;border-bottom:2px solid var(--line);padding:0 6px}
+  .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .bar{width:100%;max-width:96px;background:var(--bar);border-radius:6px 6px 0 0;position:relative;transition:.3s}
+  .bar .val{position:absolute;top:-22px;left:0;right:0;text-align:center;font-weight:680;font-size:15px}
+  .xlab{margin-top:9px;text-align:center;font-size:12.5px;line-height:1.35}
+  .xlab b{display:block;font-size:12.5px}
+  .xlab span{color:var(--muted);font-size:11px}
+  .ref{position:relative;max-width:760px}
+  .refline{position:absolute;left:6px;right:6px;border-top:2px dashed var(--ref);}
+  .refl{position:absolute;right:8px;color:var(--ref);font-size:11px;font-weight:600;background:#fff;padding:0 4px;transform:translateY(-50%)}
+  .note{color:var(--muted);font-size:12px;max-width:760px;line-height:1.55;margin-top:20px;border-top:1px solid var(--line);padding-top:12px}
+  .kick{color:var(--bar);font-weight:680}
+</style></head>
+<body>
+<h1>Who lives near frequent transit, by neighborhood income</h1>
+<p class="sub">Share of TriMet-district residents living within a ¼-mile walk of a frequent-service stop, by population-weighted income fifth. Each fifth holds ~319,000 residents. District-wide, <b>36.7%</b> of 1.60&nbsp;M residents are near frequent service.</p>
+<div class="chart">
+  <div class="ref">
+    <div class="bars" id="bars"></div>
+    <div class="refline" id="ref"></div><div class="refl" id="refl">district avg 36.7%</div>
+  </div>
+</div>
+<p class="note"><span class="kick">The gradient is steeply progressive.</span> The poorest fifth of residents are <b>3.5× more likely</b> to live near frequent service than the richest fifth (60% vs 17%) — because Portland's frequent grid runs through the dense, lower-income inner neighborhoods, while wealthier households cluster in low-density hills and outer suburbs the frequent network doesn't reach. Access by share of people of color tilts the same way but far more gently (32% in the least-diverse fifth up to 44% in the most). <br><br>Frequent = TriMet's <code>frequent</code> flag on bus + MAX stops (a static designation, not live headways); access is a ¼-mile straight-line buffer, area-weighted into block groups and clipped to the service district. Source: TriMet Portolan catalog × ACS 2019–2023 block groups.</p>
+<script>
+const D=[
+ {f:"Poorest fifth",lo:"$11k",hi:"$69k",v:60.0},
+ {f:"2nd",lo:"$69k",hi:"$88k",v:42.9},
+ {f:"Middle",lo:"$88k",hi:"$109k",v:35.3},
+ {f:"4th",lo:"$109k",hi:"$139k",v:28.3},
+ {f:"Richest fifth",lo:"$139k",hi:"$250k",v:17.1},
+];
+const H=300, MAX=65;
+const bars=document.getElementById('bars');
+D.forEach((d,i)=>{
+  const col=document.createElement('div');col.className='col';
+  const h=Math.round(H*d.v/MAX);
+  col.innerHTML=`<div class="bar" style="height:${h}px;background:${i===0?'#1f5a99':i===4?'#9dc0e2':'#2b6cb0'}">
+      <div class="val">${d.v}%</div></div>
+    <div class="xlab"><b>${d.f}</b><span>${d.lo}–${d.hi}</span></div>`;
+  bars.appendChild(col);
+});
+// place reference line at 36.7%
+const refY = H*(1 - 36.7/MAX);
+const ref=document.getElementById('ref'); ref.style.top=refY+'px';
+document.getElementById('refl').style.top=refY+'px';
+</script>
+</body></html>
