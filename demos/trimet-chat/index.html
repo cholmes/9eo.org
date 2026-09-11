@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Is Portland's transit fairly distributed? — a Claude + Portolan exploration</title>
+<title>Talking to TriMet Data - a Claude + Portolan exploration</title>
 <style>
 :root{--ink:#1b2330;--muted:#66707c;--line:#e7eaef;--accent:#2b6cb0;--bg:#f7f8fa;--uq:#eef4fb}
 *{box-sizing:border-box}
@@ -39,8 +39,8 @@ footer a{color:var(--accent)}
 <body><div class="wrap">
 <header>
 <div class="kick">Claude · Portolan catalogs · a live data exploration</div>
-<h1>Is Portland's transit fairly distributed?</h1>
-<p class="lede">Six questions, asked in plain English, answered by querying cloud-native geospatial data directly — no downloads, no desktop GIS, no pipeline. Claude read two <a href="https://github.com/portolan-sdi/portolan-spec">Portolan</a> catalogs — the TriMet transit catalog on <a href="https://source.coop/cholmes/trimet">Source Cooperative</a> and a local companion of street-tree and census data — joined them with DuckDB, and built the maps and charts linked below. You can browse the underlying TriMet layers in the <a href="https://cholmes.github.io/trimet-data-browser/">TriMet data browser</a>.</p>
+<h1>Talking to TriMet Data</h1>
+<p class="lede">This is a transcript of a full session with Claude about the <a href="https://source.coop/cholmes/trimet">TriMet Portolan Mirror</a>. It was done with Claude Desktop with Cowork, to demonstrate that you don't need to be a developer and use Claude Code. The Portolan Skills were installed, and Claude installed DuckDB on its own. The session does interact with some tree data and some census data, which were stored locally, but in the future would be their own Portolan catalogs. You can explore the underlying TriMet layers in the <a href="https://cholmes.github.io/trimet-data-browser/">TriMet data browser</a>.</p>
 <p class="meta">Data: TriMet GIS · City of Portland street-tree inventory (253,909 trees) · U.S. Census ACS 2019–2023 block groups. All in EPSG:2913, so cross-catalog spatial joins need no reprojection. Below is the complete, verbatim conversation.</p>
 </header>
 <h2>Maps &amp; charts built during the conversation</h2>
