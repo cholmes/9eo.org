@@ -60,14 +60,24 @@ layout: default
   // Mark image-caption paragraphs — ones whose whole content is a single
   // <em>. A CSS-only `p > em:only-child` can't do this: :only-child ignores
   // text nodes, so it also matches <p><em>All</em> followed by prose</p>.
+  // The caption also has to sit under a figure: the -18px top margin that
+  // tucks it against one would otherwise drag an italic byline or a
+  // cross-post note over whatever happens to precede it.
   (function () {
     var content = document.querySelector('.post-content');
     if (!content) return;
+    function isFigure(el) {
+      if (!el) return false;
+      var name = el.nodeName;
+      if (name === 'IMG' || name === 'VIDEO' || name === 'FIGURE' || name === 'PICTURE') return true;
+      // Markdown puts a lone image in a paragraph of its own.
+      return name === 'P' && el.textContent.trim() === '' && !!el.querySelector('img, video');
+    }
     Array.prototype.forEach.call(content.querySelectorAll('p'), function (p) {
       var kids = Array.prototype.filter.call(p.childNodes, function (n) {
         return n.nodeType !== 3 || n.textContent.trim() !== '';
       });
-      if (kids.length === 1 && kids[0].nodeName === 'EM') {
+      if (kids.length === 1 && kids[0].nodeName === 'EM' && isFigure(p.previousElementSibling)) {
         p.classList.add('post-caption');
       }
     });
